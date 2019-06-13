@@ -55,15 +55,19 @@ public:
     do_read() {
         auto pThis = shared_from_this();
         // Read a request
+<<<<<<< HEAD
         boost::asio::async_read(pThis->socket, pThis->buff, [pThis](const boost::system::error_code &e, std::size_t s) {
             std::ostringstream ss;
             ss << &pThis->buff;
             std::string string = ss.str();
         });
 
+=======
+        boost::asio::async_read(pThis->socket, pThis->buff, std::bind(&session::handle_http, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+>>>>>>> master
     }
 
-    void handle_http() {
+    void handle_http(boost::system::error_code ec, std::size_t s) {
         auto list = QString::fromStdString(
                 std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" |/");
         for (auto &a:list) {
