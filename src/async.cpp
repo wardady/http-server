@@ -54,140 +54,134 @@ public:
     void
     do_read() {
         auto pThis = shared_from_this();
-        // Read a request
-<<<<<<< HEAD
-        boost::asio::async_read(pThis->socket, pThis->buff, [pThis](const boost::system::error_code &e, std::size_t s) {
-            std::ostringstream ss;
-            ss << &pThis->buff;
-            std::string string = ss.str();
-        });
-
-=======
-        boost::asio::async_read(pThis->socket, pThis->buff, std::bind(&session::handle_http, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
->>>>>>> master
+        boost::asio::async_read(pThis->socket, pThis->buff,
+                                std::bind(&session::handle_http, shared_from_this(), std::placeholders::_1,
+                                          std::placeholders::_2));
     }
 
     void handle_http(boost::system::error_code ec, std::size_t s) {
         auto list = QString::fromStdString(
-                std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" |/");
-        for (auto &a:list) {
-            std::cout << a.toStdString() << std::endl;
-        }
+                std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
+        std::cout << list[1].toStdString() << std::endl;
         if (list[0] != "GET") {
             // TODO WRITE ERROR 404
         } else {
-            if (list[1] == "")
-                list[1] = "index.html";
+            if (list[1] == "/")
+                list[1] = "/index.html";
+            list[1] = "../pages" + list[1];
             if (!boost::filesystem::exists(list[1].toStdString())) {
                 // TODO WRITE ERROR 404
-                 }
-
             }
+            else{
+                // TODO WRITE PAGE
+            }
+
         }
-    };
+    }
+};
 
 //------------------------------------------------------------------------------
 
 // Accepts incoming connections and launches the sessions
-    class listener : public std::enable_shared_from_this<listener> {
-        tcp::acceptor acceptor_;
-        tcp::socket socket_;
+class listener : public std::enable_shared_from_this<listener> {
+    tcp::acceptor acceptor_;
+    tcp::socket socket_;
 
-    public:
-        listener(
-                boost::asio::io_context &ioc,
-                tcp::endpoint endpoint)
-                : acceptor_(ioc), socket_(ioc) {
-            boost::system::error_code ec;
+public:
+    listener(
+            boost::asio::io_context &ioc,
+            tcp::endpoint endpoint)
+            : acceptor_(ioc), socket_(ioc) {
+        boost::system::error_code ec;
 
-            // Open the acceptor
-            acceptor_.open(endpoint.protocol(), ec);
-            if (ec) {
-                fail(ec, "open");
-                return;
-            }
-
-            // Bind to the server address
-            acceptor_.bind(endpoint, ec);
-            if (ec) {
-                fail(ec, "bind");
-                return;
-            }
-
-            // Start listening for connections
-            acceptor_.listen(
-                    boost::asio::socket_base::max_listen_connections, ec);
-            if (ec) {
-                fail(ec, "listen");
-                return;
-            }
+        // Open the acceptor
+        acceptor_.open(endpoint.protocol(), ec);
+        if (ec) {
+            fail(ec, "open");
+            return;
         }
 
-        // Start accepting incoming connections
-        void
-        run() {
-            if (!acceptor_.is_open())
-                return;
-            do_accept();
+        // Bind to the server address
+        acceptor_.bind(endpoint, ec);
+        if (ec) {
+            fail(ec, "bind");
+            return;
         }
 
-        void
-        do_accept() {
-            acceptor_.async_accept(
-                    socket_,
-                    std::bind(
-                            &listener::on_accept,
-                            shared_from_this(),
-                            std::placeholders::_1));
+        // Start listening for connections
+        acceptor_.listen(
+                boost::asio::socket_base::max_listen_connections, ec);
+        if (ec) {
+            fail(ec, "listen");
+            return;
+        }
+    }
+
+    // Start accepting incoming connections
+    void
+    run() {
+        if (!acceptor_.is_open())
+            return;
+        do_accept();
+    }
+
+    void
+    do_accept() {
+        acceptor_.async_accept(
+                socket_,
+                std::bind(
+                        &listener::on_accept,
+                        shared_from_this(),
+                        std::placeholders::_1));
+    }
+
+    void
+    on_accept(boost::system::error_code ec) {
+        if (ec) {
+            fail(ec, "accept");
+        } else {
+            // Create the session and run it
+            std::make_shared<session>(
+                    std::move(socket_))->run();
         }
 
-        void
-        on_accept(boost::system::error_code ec) {
-            if (ec) {
-                fail(ec, "accept");
-            } else {
-                // Create the session and run it
-                std::make_shared<session>(
-                        std::move(socket_))->run();
-            }
-
-            // Accept another connection
-            do_accept();
-        }
-    };
+        // Accept another connection
+        do_accept();
+    }
+};
 
 //------------------------------------------------------------------------------
 
-    int main(int argc, char *argv[]) {
-        // Check command line arguments.
-        if (argc != 4) {
-            std::cerr <<
-                      "Usage: http-server-async <address> <port> <doc_root> <threads>\n" <<
-                      "Example:\n" <<
-                      "    http-server-async 127.0.0.1 8080 1\n";
-            return EXIT_FAILURE;
-        }
-        auto const address = boost::asio::ip::make_address(argv[1]);
-        auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
-        auto const threads = std::max<int>(1, std::atoi(argv[3]));
-
-        // The io_context is required for all I/O
-        boost::asio::io_service ioc{threads};
-
-        // Create and launch a listening port
-        std::make_shared<listener>(
-                ioc,
-                tcp::endpoint{address, port})->run();
-
-        // Run the I/O service on the requested number of threads
-        std::vector<std::thread> v;
-        v.reserve(threads - 1);
-        for (auto i = threads - 1; i > 0; --i)
-            v.emplace_back(
-                    [&ioc] {
-                        ioc.run();
-                    });
-        ioc.run();
-
-        return EXIT_SUCCESS;
+int main(int argc, char *argv[]) {
+    // Check command line arguments.
+    if (argc != 4) {
+        std::cerr <<
+                  "Usage: http-server-async <address> <port> <doc_root> <threads>\n" <<
+                  "Example:\n" <<
+                  "    http-server-async 127.0.0.1 8080 1\n";
+        return EXIT_FAILURE;
     }
+    auto const address = boost::asio::ip::make_address(argv[1]);
+    auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
+    auto const threads = std::max<int>(1, std::atoi(argv[3]));
+
+    // The io_context is required for all I/O
+    boost::asio::io_service ioc{threads};
+
+    // Create and launch a listening port
+    std::make_shared<listener>(
+            ioc,
+            tcp::endpoint{address, port})->run();
+
+    // Run the I/O service on the requested number of threads
+    std::vector<std::thread> v;
+    v.reserve(threads - 1);
+    for (auto i = threads - 1; i > 0; --i)
+        v.emplace_back(
+                [&ioc] {
+                    ioc.run();
+                });
+    ioc.run();
+
+    return EXIT_SUCCESS;
+}
