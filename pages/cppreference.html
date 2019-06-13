@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html dir="ltr" class="client-js gr__en_cppreference_com" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>cppreference.com</title>
+<meta charset="UTF-8">
+<meta name="generator" content="MediaWiki 1.21.2">
+<link rel="shortcut icon" href="https://en.cppreference.com/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://en.cppreference.com/mwiki/opensearch_desc.php" title="cppreference.com (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://en.cppreference.com/mwiki/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="cppreference.com Atom feed" href="https://en.cppreference.com/mwiki/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="cppreference_files/load.css">
+<style>
+.t-example-live-link{display:block !important;position:relative;margin-top:1em;padding:0 1em;width:55em}.t-example-live-link > a{display:none}.coliru-btn{background-color:#eeeeee;background-image:linear-gradient(#ffffff,#eeeeee);background-repeat:repeat-x;border:1px solid #cccccc;border-radius:3px;box-shadow:0 1px 0 rgba(255,255,255,0.5);padding:3px;margin:3px;color:#333333;cursor:pointer;display:inline-block;font-size:0.8em;font-weight:bold;line-height:1em}.coliru-btn:hover{background-color:#dddddd;background-image:linear-gradient(#ffffff,#dddddd)}.coliru-btn-disabled{color:#888888}.coliru-btn-disabled:hover{background-color:#eeeeee;background-image:linear-gradient(#ffffff,#eeeeee)}.coliru-powered{font-size:0.8em;position:absolute;bottom:0;right:0}.ace_editor{display:block;position:relative !important;top:0;right:0;bottom:0;left:0;width:100%;height:30em;font-family:DejaVuSansMono,"DejaVu Sans Mono",courier,monospace !important}.t-example-code{margin-top:0 !important}.coliru-output{overflow:auto;max-height:15em}.coliru-output > div{display:table;width:100%}.coliru-output pre{border:none;display:table-row;padding:0;margin:0}.coliru-output-line-shell{background-color:#ffd8d8}.coliru-select-compiler select{background-color:#EEEEEE;background-image:linear-gradient(#FFFFFF,#EEEEEE);background-repeat:repeat-x;border:1px solid #CCCCCC;border-radius:3px 3px 3px 3px;box-shadow:0 1px 0 rgba(255,255,255,0.5);font-size:0.8em;line-height:1em;padding:0;width:12em}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:50a161ae2572e9a968ebbe7279923688 */
+.mw-collapsible-toggle{float:right} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:4250852ed2349a0d4d0fc6509a3e7d4c */
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.autoellipsis-matched,.highlight{font-weight:bold}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:9780324491b653a3780e2d029bdc140c */</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{text-decoration:none;color:black}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:52b1797f70c7e4094dfa4191101944e8 */</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="cppreference_files/load_002.css">
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}#toc{display:none}.editsection{display:none}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:472787eddcf4605d11de8c7ef047234f */</style>
+
+<script src="cppreference_files/load_004.php"></script><script src="cppreference_files/load_006.php"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Main_Page","wgTitle":"Main Page","wgCurRevisionId":110059,"wgArticleId":1,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Main_Page","wgRestrictionEdit":["autoconfirmed"],"wgRestrictionMove":["autoconfirmed"],"wgIsMainPage":true});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":0,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":0,"showtoolbar":1,"skin":"cppreference2","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":0,"watchdefault":0,"watchdeletion":0,
+"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"gadget-ColiruCompiler":1,"gadget-MathJax":1});;},{},{});mw.loader.implement("user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});;},{},{});
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-js:7:9f05c6caceb9bb1a482b6cebd4c5a330 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax"]);
+}</script><script src="cppreference_files/load_002.php"></script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/mwiki/skins/cppreference2/csshover.min.htc")}</style><![endif]--><script async="" src="cppreference_files/load_003.php"></script><style id="ace_editor.css">.ace_editor {position: relative;overflow: hidden;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;direction: ltr;text-align: left;}.ace_scroller {position: absolute;overflow: hidden;top: 0;bottom: 0;background-color: inherit;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;cursor: text;}.ace_content {position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;min-width: 100%;}.ace_dragging .ace_scroller:before{position: absolute;top: 0;left: 0;right: 0;bottom: 0;content: '';background: rgba(250, 250, 250, 0.01);z-index: 1000;}.ace_dragging.ace_dark .ace_scroller:before{background: rgba(0, 0, 0, 0.01);}.ace_selecting, .ace_selecting * {cursor: text !important;}.ace_gutter {position: absolute;overflow : hidden;width: auto;top: 0;bottom: 0;left: 0;cursor: default;z-index: 4;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;}.ace_gutter-active-line {position: absolute;left: 0;right: 0;}.ace_scroller.ace_scroll-left {box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;}.ace_gutter-cell {padding-left: 19px;padding-right: 6px;background-repeat: no-repeat;}.ace_gutter-cell.ace_error {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: 2px center;}.ace_gutter-cell.ace_warning {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==");background-position: 2px center;}.ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAAB2k804AAAAPklEQVQY02NgIB68QuO3tiLznjAwpKTgNyDbMegwisCHZUETUZV0ZqOquBpXj2rtnpSJT1AEnnRmL2OgGgAAIKkRQap2htgAAAAASUVORK5CYII=");background-position: 2px center;}.ace_dark .ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJFBMVEUAAAChoaGAgIAqKiq+vr6tra1ZWVmUlJSbm5s8PDxubm56enrdgzg3AAAAAXRSTlMAQObYZgAAAClJREFUeNpjYMAPdsMYHegyJZFQBlsUlMFVCWUYKkAZMxZAGdxlDMQBAG+TBP4B6RyJAAAAAElFTkSuQmCC");}.ace_scrollbar {position: absolute;right: 0;bottom: 0;z-index: 6;}.ace_scrollbar-inner {position: absolute;cursor: text;left: 0;top: 0;}.ace_scrollbar-v{overflow-x: hidden;overflow-y: scroll;top: 0;}.ace_scrollbar-h {overflow-x: scroll;overflow-y: hidden;left: 0;}.ace_print-margin {position: absolute;height: 100%;}.ace_text-input {position: absolute;z-index: 0;width: 0.5em;height: 1em;opacity: 0;background: transparent;-moz-appearance: none;appearance: none;border: none;resize: none;outline: none;overflow: hidden;font: inherit;padding: 0 1px;margin: 0 -1px;text-indent: -1em;-ms-user-select: text;-moz-user-select: text;-webkit-user-select: text;user-select: text;white-space: pre!important;}.ace_text-input.ace_composition {background: inherit;color: inherit;z-index: 1000;opacity: 1;text-indent: 0;}.ace_layer {z-index: 1;position: absolute;overflow: hidden;word-wrap: normal;white-space: pre;height: 100%;width: 100%;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;pointer-events: none;}.ace_gutter-layer {position: relative;width: auto;text-align: right;pointer-events: auto;}.ace_text-layer {font: inherit !important;}.ace_cjk {display: inline-block;text-align: center;}.ace_cursor-layer {z-index: 4;}.ace_cursor {z-index: 4;position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;border-left: 2px solid;transform: translatez(0);}.ace_slim-cursors .ace_cursor {border-left-width: 1px;}.ace_overwrite-cursors .ace_cursor {border-left-width: 0;border-bottom: 1px solid;}.ace_hidden-cursors .ace_cursor {opacity: 0.2;}.ace_smooth-blinking .ace_cursor {-webkit-transition: opacity 0.18s;transition: opacity 0.18s;}.ace_editor.ace_multiselect .ace_cursor {border-left-width: 1px;}.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {position: absolute;z-index: 3;}.ace_marker-layer .ace_selection {position: absolute;z-index: 5;}.ace_marker-layer .ace_bracket {position: absolute;z-index: 6;}.ace_marker-layer .ace_active-line {position: absolute;z-index: 2;}.ace_marker-layer .ace_selected-word {position: absolute;z-index: 4;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;}.ace_line .ace_fold {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;display: inline-block;height: 11px;margin-top: -2px;vertical-align: middle;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=");background-repeat: no-repeat, repeat-x;background-position: center center, top left;color: transparent;border: 1px solid black;border-radius: 2px;cursor: pointer;pointer-events: auto;}.ace_dark .ace_fold {}.ace_fold:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC");}.ace_tooltip {background-color: #FFF;background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));border: 1px solid gray;border-radius: 1px;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);color: black;max-width: 100%;padding: 3px 4px;position: fixed;z-index: 999999;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;cursor: default;white-space: pre;word-wrap: break-word;line-height: normal;font-style: normal;font-weight: normal;letter-spacing: normal;pointer-events: none;}.ace_folding-enabled > .ace_gutter-cell {padding-right: 13px;}.ace_fold-widget {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;margin: 0 -12px 0 1px;display: none;width: 11px;vertical-align: top;background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42mWKsQ0AMAzC8ixLlrzQjzmBiEjp0A6WwBCSPgKAXoLkqSot7nN3yMwR7pZ32NzpKkVoDBUxKAAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: center;border-radius: 3px;border: 1px solid transparent;cursor: pointer;}.ace_folding-enabled .ace_fold-widget {display: inline-block;   }.ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42m3HwQkAMAhD0YzsRchFKI7sAikeWkrxwScEB0nh5e7KTPWimZki4tYfVbX+MNl4pyZXejUO1QAAAABJRU5ErkJggg==");}.ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAOUlEQVR42jXKwQkAMAgDwKwqKD4EwQ26sSOkVWjgIIHAzPiCgaqiqnJHZnKICBERHN194O5b9vbLuAVRL+l0YWnZAAAAAElFTkSuQmCCXA==");}.ace_fold-widget:hover {border: 1px solid rgba(0, 0, 0, 0.3);background-color: rgba(255, 255, 255, 0.2);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);}.ace_fold-widget:active {border: 1px solid rgba(0, 0, 0, 0.4);background-color: rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);}.ace_dark .ace_fold-widget {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");}.ace_dark .ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget:hover {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);background-color: rgba(255, 255, 255, 0.1);}.ace_dark .ace_fold-widget:active {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);}.ace_fold-widget.ace_invalid {background-color: #FFB4B4;border-color: #DE5555;}.ace_fade-fold-widgets .ace_fold-widget {-webkit-transition: opacity 0.4s ease 0.05s;transition: opacity 0.4s ease 0.05s;opacity: 0;}.ace_fade-fold-widgets:hover .ace_fold-widget {-webkit-transition: opacity 0.05s ease 0.05s;transition: opacity 0.05s ease 0.05s;opacity:1;}.ace_underline {text-decoration: underline;}.ace_bold {font-weight: bold;}.ace_nobold .ace_bold {font-weight: normal;}.ace_italic {font-style: italic;}.ace_error-marker {background-color: rgba(255, 0, 0,0.2);position: absolute;z-index: 9;}.ace_highlight-marker {background-color: rgba(255, 255, 0,0.2);position: absolute;z-index: 8;}.ace_br1 {border-top-left-radius    : 3px;}.ace_br2 {border-top-right-radius   : 3px;}.ace_br3 {border-top-left-radius    : 3px; border-top-right-radius:    3px;}.ace_br4 {border-bottom-right-radius: 3px;}.ace_br5 {border-top-left-radius    : 3px; border-bottom-right-radius: 3px;}.ace_br6 {border-top-right-radius   : 3px; border-bottom-right-radius: 3px;}.ace_br7 {border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px;}.ace_br8 {border-bottom-left-radius : 3px;}.ace_br9 {border-top-left-radius    : 3px; border-bottom-left-radius:  3px;}.ace_br10{border-top-right-radius   : 3px; border-bottom-left-radius:  3px;}.ace_br11{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-left-radius:  3px;}.ace_br12{border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br13{border-top-left-radius    : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br14{border-top-right-radius   : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br15{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+/*# sourceURL=ace/css/ace_editor.css */</style><style id="ace-tm">.ace-tm .ace_gutter {background: #f0f0f0;color: #333;}.ace-tm .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-tm .ace_fold {background-color: #6B72E6;}.ace-tm {background-color: #FFFFFF;color: black;}.ace-tm .ace_cursor {color: black;}.ace-tm .ace_invisible {color: rgb(191, 191, 191);}.ace-tm .ace_storage,.ace-tm .ace_keyword {color: blue;}.ace-tm .ace_constant {color: rgb(197, 6, 11);}.ace-tm .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-tm .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-tm .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-tm .ace_invalid {background-color: rgba(255, 0, 0, 0.1);color: red;}.ace-tm .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-tm .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-tm .ace_support.ace_type,.ace-tm .ace_support.ace_class {color: rgb(109, 121, 222);}.ace-tm .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-tm .ace_string {color: rgb(3, 106, 7);}.ace-tm .ace_comment {color: rgb(76, 136, 107);}.ace-tm .ace_comment.ace_doc {color: rgb(0, 102, 255);}.ace-tm .ace_comment.ace_doc.ace_tag {color: rgb(128, 159, 191);}.ace-tm .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-tm .ace_variable {color: rgb(49, 132, 149);}.ace-tm .ace_xml-pe {color: rgb(104, 104, 91);}.ace-tm .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-tm .ace_heading {color: rgb(12, 7, 255);}.ace-tm .ace_list {color:rgb(185, 6, 144);}.ace-tm .ace_meta.ace_tag {color:rgb(0, 22, 142);}.ace-tm .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-tm .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-tm.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px white;}.ace-tm .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-tm .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-tm .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-tm .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-tm .ace_gutter-active-line {background-color : #dcdcdc;}.ace-tm .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-tm .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-tm */</style><style>    .error_widget_wrapper {        background: inherit;        color: inherit;        border:none    }    .error_widget {        border-top: solid 2px;        border-bottom: solid 2px;        margin: 5px 0;        padding: 10px 40px;        white-space: pre-wrap;    }    .error_widget.ace_error, .error_widget_arrow.ace_error{        border-color: #ff5a5a    }    .error_widget.ace_warning, .error_widget_arrow.ace_warning{        border-color: #F1D817    }    .error_widget.ace_info, .error_widget_arrow.ace_info{        border-color: #5a5a5a    }    .error_widget.ace_ok, .error_widget_arrow.ace_ok{        border-color: #5aaa5a    }    .error_widget_arrow {        position: absolute;        border: solid 5px;        border-top-color: transparent!important;        border-right-color: transparent!important;        border-left-color: transparent!important;        top: -5px;    }</style><script id="_carbonads_projs" type="text/javascript" src="cppreference_files/CKYITK7M.js"></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Main_Page skin-cppreference2 action-view" data-gr-c-s-loaded="true">
+        <!-- header -->
+        <div id="mw-head" class="noprint">
+            <div id="cpp-head-first-base">
+                <div id="cpp-head-first">
+                    <h5><a href="https://en.cppreference.com/">
+                        cppreference.com                        </a></h5>
+                    <div id="cpp-head-search">
+                        
+<!-- 0 -->
+<div id="p-search">
+	<h5><label for="searchInput">Search</label></h5>
+	<form action="/mwiki/index.php" id="searchform">
+		<input type="hidden" name="title" value="Special:Search">
+				<div id="simpleSearch">
+						<input name="search" title="Search cppreference.com [alt-shift-f]" accesskey="f" id="searchInput" autocomplete="off" placeholder="Search">						<button type="submit" name="button" title="Search the pages for this text" id="searchButton"><img src="cppreference_files/search-ltr.png" alt="Search"></button>					</div>
+			</form>
+</div>
+
+<!-- /0 -->
+                    </div>
+                    <div id="cpp-head-personal">
+                        
+<!-- 0 -->
+<div id="p-personal" class="">
+<span id="pt-createaccount"><a href="https://en.cppreference.com/mwiki/index.php?title=Special:UserLogin&amp;returnto=Main+Page&amp;type=signup">Create account</a></span>	<div class="menu">
+        <ul>
+<li id="pt-login"><a href="https://en.cppreference.com/mwiki/index.php?title=Special:UserLogin&amp;returnto=Main+Page" title="You are encouraged to log in; however, it is not mandatory [alt-shift-o]" accesskey="o">Log in</a></li>        </ul>
+    </div>
+</div>
+
+<!-- /0 -->
+                    </div>
+
+                </div>
+            </div>
+            <div id="cpp-head-second-base">
+                <div id="cpp-head-second">
+                    <div id="cpp-head-tools-left">
+                        
+<!-- 0 -->
+<div id="p-namespaces" class="vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="https://en.cppreference.com/w/Main_Page" title="View the content page [alt-shift-c]" accesskey="c">Page</a></span></li>
+					<li id="ca-talk"><span><a href="https://en.cppreference.com/w/Talk:Main_Page" title="Discussion about the content page [alt-shift-t]" accesskey="t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" class="vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+                    </div>
+                    <div id="cpp-head-tools-right">
+                        
+<!-- 0 -->
+<div id="p-views" class="vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="https://en.cppreference.com/w/Main_Page">View</a></span></li>
+					<li id="ca-viewsource"><span><a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;action=edit" title="This page is protected.
+You can view its source [alt-shift-e]" accesskey="e">View source</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;action=history" title="Past revisions of this page [alt-shift-h]" accesskey="h">History</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" class="vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /header -->
+        <!-- content -->
+<style type="text/css">
+#carbonads {
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  left: -170px;
+  max-width: 150px;
+  border-radius: 4px;
+  border: solid 1px hsla(0, 0%, 0%, .1);
+  background-color: hsl(0, 0%, 98%);
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+  Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+#carbonads a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#carbonads a:hover {
+  color: inherit;
+}
+
+#carbonads span {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.carbon-img {
+  display: block;
+  margin-bottom: 8px;
+  max-width: 150px;
+  line-height: 1;
+}
+
+.carbon-img img {
+  display: block;
+  margin: 0 auto;
+  max-width: 150px !important;
+  width: 150px;
+  height: auto;
+}
+
+.carbon-text {
+  display: block;
+  padding: 0 1em 8px;
+}
+
+.carbon-poweredby {
+  display: block;
+  padding: 8px 12px;
+  background: repeating-linear-gradient(-45deg, transparent, transparent 5px, hsla(0, 0%, 0%, .025) 5px, hsla(0, 0%, 0%, .025) 10px) hsla(203, 11%, 95%, .4);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+  font-size: 9px;
+  line-height: 1;
+}
+</style>
+        <div id="cpp-content-base">
+            <div id="content">
+                <a id="top"></a>
+                <div id="mw-js-message" style="display:none;"></div>
+                                <!-- firstHeading -->
+<script async="" type="text/javascript" src="cppreference_files/carbon.js" id="_carbonads_js"></script><div id="carbonads"><span><span class="carbon-wrap"><a href="https://srv.carbonads.net/ads/click/x/GTND42QNCTBD4KQYC6YLYKQMCYYDCKJYFTSDPZ3JCWSDT23YCESD5KJKC6BIKK3IFTYDVK3EHJNCLSIZ?segment=placement:cppreferencecom;" class="carbon-img" target="_blank" rel="noopener"><img src="cppreference_files/1525189943-38523.png" alt="ads via Carbon" style="max-width: 130px;" width="130" height="100" border="0"></a><a href="https://srv.carbonads.net/ads/click/x/GTND42QNCTBD4KQYC6YLYKQMCYYDCKJYFTSDPZ3JCWSDT23YCESD5KJKC6BIKK3IFTYDVK3EHJNCLSIZ?segment=placement:cppreferencecom;" class="carbon-text" target="_blank" rel="noopener">Limited time offer: Get 10 free Adobe Stock images.</a></span><a href="http://carbonads.net/?utm_source=cppreferencecom&amp;utm_medium=ad_via_link&amp;utm_campaign=in_unit&amp;utm_term=carbon" class="carbon-poweredby" target="_blank" rel="noopener">ads via Carbon</a></span></div>
+                <h1 id="firstHeading" class="firstHeading">C and C++ reference</h1>
+                <!-- /firstHeading -->
+                <!-- bodyContent -->
+                <div id="bodyContent">
+                                        <!-- tagline -->
+                    <div id="siteSub">From cppreference.com</div>
+                    <!-- /tagline -->
+                                        <!-- subtitle -->
+                    <div id="contentSub"></div>
+                    <!-- /subtitle -->
+                                                            <!-- bodycontent -->
+                    <div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="en"><table class="mainpagetable" style="width:100%; white-space:nowrap;" cellspacing="0">
+
+<tbody><tr class="row rowtop">
+<td colspan="3">
+<p><a href="https://en.cppreference.com/w/cpp" title="cpp"><span style="font-size: 2em;">C++ reference</span><br>
+<span style="font-size: 0.8em;">C++98, C++03, C++11, C++14, C++17, C++20</span>
+</a>
+</p>
+</td></tr>
+<tr class="row">
+<td>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/compiler_support" title="cpp/compiler support"> Compiler support</a><br>
+<a href="https://en.cppreference.com/w/cpp/freestanding" title="cpp/freestanding"> Freestanding implementations</a>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/language" title="cpp/language"> Language</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/language/basic_concepts" title="cpp/language/basic concepts"> Basic concepts</a><br>
+<a href="https://en.cppreference.com/w/cpp/keyword" title="cpp/keyword"> C++ Keywords</a><br>
+<a href="https://en.cppreference.com/w/cpp/preprocessor" title="cpp/preprocessor"> Preprocessor</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/expressions" title="cpp/language/expressions"> Expressions</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/declarations" title="cpp/language/declarations"> Declaration</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/initialization" title="cpp/language/initialization"> Initialization</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/functions" title="cpp/language/functions"> Functions</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/statements" title="cpp/language/statements"> Statements</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/classes" title="cpp/language/classes"> Classes</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/templates" title="cpp/language/templates"> Templates</a><br>
+<a href="https://en.cppreference.com/w/cpp/language/exceptions" title="cpp/language/exceptions"> Exceptions</a><br>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/header" title="cpp/header"> Headers</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/named_req" title="cpp/named req"> Named requirements</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/feature_test" title="cpp/feature test">Feature test macros</a></b> <span class="t-mark-rev t-since-cxx20">(C++20)</span>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/utility#Language_support" title="cpp/utility"> Language support library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/types" title="cpp/types"> Type support</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/types#Type_traits_.28since_C.2B.2B11.29" title="cpp/types">traits</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+<a href="https://en.cppreference.com/w/cpp/utility/program" title="cpp/utility/program"> Program utilities</a><br>
+<a href="https://en.cppreference.com/w/cpp/utility#Relational_operators_and_comparison" title="cpp/utility"> Relational comparators</a> <span class="t-mark-rev t-since-cxx20">(C++20)</span><br>
+<a href="https://en.cppreference.com/w/cpp/types/numeric_limits" title="cpp/types/numeric limits"><tt>numeric_limits</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/types/type_info" title="cpp/types/type info"><tt>type_info</tt></a><br>
+<a href="https://en.cppreference.com/w/cpp/utility/initializer_list" title="cpp/utility/initializer list"><tt>initializer_list</tt></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+</p>
+</div>
+</td>
+<td>
+<p><b><a href="https://en.cppreference.com/w/cpp/concepts" title="cpp/concepts"> Concepts library</a></b> <span class="t-mark-rev t-since-cxx20">(C++20)</span>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/error" title="cpp/error"> Diagnostics library</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/utility#General-purpose_utilities" title="cpp/utility"> General utilities library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/memory" title="cpp/memory"> Smart pointers and allocators</a><br>
+<a href="https://en.cppreference.com/w/cpp/chrono" title="cpp/chrono"> Date and time</a><br>
+<a href="https://en.cppreference.com/w/cpp/utility/functional" title="cpp/utility/functional"> Function objects</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/utility/hash" title="cpp/utility/hash"><tt>hash</tt></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+<a href="https://en.cppreference.com/w/cpp/utility#Elementary_string_conversions" title="cpp/utility"> String conversions</a> <span class="t-mark-rev t-since-cxx17">(C++17)</span><br>
+<a href="https://en.cppreference.com/w/cpp/utility#Swap.2C_forward_and_move" title="cpp/utility"> Utility functions</a><br>
+<a href="https://en.cppreference.com/w/cpp/utility/pair" title="cpp/utility/pair"><tt>pair</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;
+<a href="https://en.cppreference.com/w/cpp/utility/tuple" title="cpp/utility/tuple"><tt>tuple</tt></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+<a href="https://en.cppreference.com/w/cpp/utility/optional" title="cpp/utility/optional"><tt>optional</tt></a> <span class="t-mark-rev t-since-cxx17">(C++17)</span>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/utility/any" title="cpp/utility/any"><tt>any</tt></a> <span class="t-mark-rev t-since-cxx17">(C++17)</span><br>
+<a href="https://en.cppreference.com/w/cpp/utility/variant" title="cpp/utility/variant"><tt>variant</tt></a> <span class="t-mark-rev t-since-cxx17">(C++17)</span>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/string" title="cpp/string"> Strings library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/string/basic_string" title="cpp/string/basic string"><tt>basic_string</tt></a><br>
+<a href="https://en.cppreference.com/w/cpp/string/basic_string_view" title="cpp/string/basic string view"><tt>basic_string_view</tt></a> <span class="t-mark-rev t-since-cxx17">(C++17)</span><br>
+Null-terminated strings:<br>
+&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/string/byte" title="cpp/string/byte">byte</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/string/multibyte" title="cpp/string/multibyte">multibyte</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/string/wide" title="cpp/string/wide">wide</a>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/container" title="cpp/container"> Containers library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/container/array" title="cpp/container/array"><tt>array</tt></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container/vector" title="cpp/container/vector"><tt>vector</tt></a><br>
+<a href="https://en.cppreference.com/w/cpp/container/map" title="cpp/container/map"><tt>map</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container/unordered_map" title="cpp/container/unordered map"><tt>unordered_map</tt></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+<a href="https://en.cppreference.com/w/cpp/container/priority_queue" title="cpp/container/priority queue"><tt>priority_queue</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container/span" title="cpp/container/span"><tt>span</tt></a> <span class="t-mark-rev t-since-cxx20">(C++20)</span><br>
+Other containers:<br>
+&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container#Sequence_containers" title="cpp/container">sequence</a>&nbsp;&nbsp;−&nbsp;&nbsp;
+<a href="https://en.cppreference.com/w/cpp/container#Associative_containers" title="cpp/container">associative</a><br>
+&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container#Unordered_associative_containers" title="cpp/container">unordered associative</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/container#Container_adaptors" title="cpp/container">adaptors</a>
+</p>
+</div>
+</td>
+<td>
+<p><b><a href="https://en.cppreference.com/w/cpp/iterator" title="cpp/iterator"> Iterators library</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/ranges" title="cpp/ranges"> Ranges library</a></b> <span class="t-mark-rev t-since-cxx20">(C++20)</span>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/algorithm" title="cpp/algorithm"> Algorithms library</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/numeric" title="cpp/numeric"> Numerics library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/numeric/math" title="cpp/numeric/math"> Common math functions</a><br>
+<a href="https://en.cppreference.com/w/cpp/numeric/special_math" title="cpp/numeric/special math"> Special math functions</a> <span class="t-mark-rev t-since-cxx17">(C++17)</span><br>
+<a href="https://en.cppreference.com/w/cpp/numeric#Numeric_algorithms" title="cpp/numeric"> Numeric algorithms</a><br>
+<a href="https://en.cppreference.com/w/cpp/numeric/random" title="cpp/numeric/random"> Pseudo-random number generation</a><br>
+<a href="https://en.cppreference.com/w/cpp/numeric/fenv" title="cpp/numeric/fenv"> Floating-point environment</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span><br>
+<a href="https://en.cppreference.com/w/cpp/numeric/complex" title="cpp/numeric/complex"><tt>complex</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/numeric/valarray" title="cpp/numeric/valarray"><tt>valarray</tt></a>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/io" title="cpp/io"> Input/output library</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/io#Stream-based_I.2FO" title="cpp/io"> Stream-based I/O</a><br>
+<a href="https://en.cppreference.com/w/cpp/io#Synchronized_output" title="cpp/io"> Synchronized output</a> <span class="t-mark-rev t-since-cxx20">(C++20)</span><br>
+<a href="https://en.cppreference.com/w/cpp/io/manip" title="cpp/io/manip"> I/O manipulators</a><br>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/locale" title="cpp/locale"> Localizations library</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/regex" title="cpp/regex"> Regular expressions library</a></b> <span class="t-mark-rev t-since-cxx11">(C++11)</span>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/regex/basic_regex" title="cpp/regex/basic regex"><tt>basic_regex</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/regex#Algorithms" title="cpp/regex">algorithms</a>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/atomic" title="cpp/atomic"> Atomic operations library</a></b> <span class="t-mark-rev t-since-cxx11">(C++11)</span>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/atomic/atomic" title="cpp/atomic/atomic"><tt>atomic</tt></a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/atomic/atomic_flag" title="cpp/atomic/atomic flag"><tt>atomic_flag</tt></a><br>
+<a href="https://en.cppreference.com/w/cpp/atomic/atomic_ref" title="cpp/atomic/atomic ref"><tt>atomic_ref</tt></a> <span class="t-mark-rev t-since-cxx20">(C++20)</span>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/cpp/thread" title="cpp/thread"> Thread support library</a></b> <span class="t-mark-rev t-since-cxx11">(C++11)</span>
+</p><p><b><a href="https://en.cppreference.com/w/cpp/filesystem" title="cpp/filesystem"> Filesystem library</a></b> <span class="t-mark-rev t-since-cxx17">(C++17)</span>
+</p>
+</td></tr>
+<tr class="row">
+<td colspan="3"><b><a href="https://en.cppreference.com/w/cpp/experimental" title="cpp/experimental"> Technical specifications</a></b><br>
+<p>&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/experimental/lib_extensions" title="cpp/experimental/lib extensions">Standard library extensions</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-libfund-ts t-mark-ts">(library fundamentals TS)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/experimental/lib_extensions_2" title="cpp/experimental/lib extensions 2">Standard library extensions v2</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-libfund-ts-2 t-mark-ts">(library fundamentals TS v2)</span>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/cpp/experimental/propagate_const" title="cpp/experimental/propagate const"><tt>propagate_const</tt></a> —
+<a href="https://en.cppreference.com/w/cpp/experimental/observer_ptr" title="cpp/experimental/observer ptr"><tt>observer_ptr</tt></a> — <a href="https://en.cppreference.com/w/cpp/experimental/source_location" title="cpp/experimental/source location"><tt>source_location</tt></a> <br> <a href="https://en.cppreference.com/w/cpp/experimental/ostream_joiner" title="cpp/experimental/ostream joiner"><tt>ostream_joiner</tt></a> —
+<a href="https://en.cppreference.com/w/cpp/experimental/is_detected" title="cpp/experimental/is detected">detection idiom</a> — <a href="https://en.cppreference.com/w/cpp/experimental/lib_extensions_2#Uniform_container_erasure" title="cpp/experimental/lib extensions 2">uniform container erasure</a>
+</p>
+</div>
+<p>&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/experimental/concurrency" title="cpp/experimental/concurrency">Concurrency library extensions</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-concurrency-ts t-mark-ts">(concurrency TS)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/experimental/constraints" title="cpp/experimental/constraints">Concepts</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-concepts-ts t-mark-ts">(concepts TS)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/experimental/ranges" title="cpp/experimental/ranges">Ranges</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-ranges-ts t-mark-ts">(ranges TS)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/cpp/language/transactional_memory" title="cpp/language/transactional memory">Transactional Memory</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-tm-ts t-mark-ts">(TM TS)</span><br>
+</p>
+</td></tr>
+<tr class="row rowbottom">
+<td colspan="3"> <a href="https://en.cppreference.com/w/cpp/links" title="cpp/links">External Links</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/links/libs" title="cpp/links/libs">Non-ANSI/ISO Libraries</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/index" title="cpp/index">Index</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/cpp/symbol_index" title="cpp/symbol index">std Symbol Index</a>
+</td></tr>
+<tr>
+<td> <span style="margin:12px;"></span>
+</td></tr>
+<tr class="row rowtop">
+<td colspan="3">
+<p><a href="https://en.cppreference.com/w/c" title="c"><span style="font-size: 2em;">C reference</span><br>
+<span style="font-size: 0.8em;">C89, C95, C99, C11, C17</span>
+</a>
+</p>
+</td></tr>
+<tr class="row">
+<td>
+<p><b><a href="https://en.cppreference.com/w/c/language" title="c/language"> Language</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/c/language/basic_concepts" title="c/language/basic concepts"> Basic concepts</a><br>
+<a href="https://en.cppreference.com/w/c/keyword" title="c/keyword"> C Keywords</a><br>
+<a href="https://en.cppreference.com/w/c/preprocessor" title="c/preprocessor"> Preprocessor</a><br>
+<a href="https://en.cppreference.com/w/c/language/expressions" title="c/language/expressions"> Expressions</a><br>
+<a href="https://en.cppreference.com/w/c/language/declarations" title="c/language/declarations"> Declaration</a><br>
+<a href="https://en.cppreference.com/w/c/language/initialization" title="c/language/initialization"> Initialization</a><br>
+<a href="https://en.cppreference.com/w/c/language/functions" title="c/language/functions"> Functions</a><br>
+<a href="https://en.cppreference.com/w/c/language/statements" title="c/language/statements"> Statements</a><br>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/c/header" title="c/header"> Headers</a></b>
+</p>
+</td>
+<td>
+<p><b><a href="https://en.cppreference.com/w/c/types" title="c/types"> Type support</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/program" title="c/program"> Program utilities</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/variadic" title="c/variadic"> Variadic functions</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/error" title="c/error"> Error handling</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/memory" title="c/memory"> Dynamic memory management</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/chrono" title="c/chrono"> Date and time utilities</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/string" title="c/string"> Strings library</a></b>
+</p>
+<div class="mainpagediv">
+<p>Null-terminated strings:<br>
+&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/string/byte" title="c/string/byte"> byte</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/string/multibyte" title="c/string/multibyte"> multibyte</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/string/wide" title="c/string/wide"> wide</a>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/c/algorithm" title="c/algorithm"> Algorithms</a></b>
+</p>
+</td>
+<td>
+<p><b><a href="https://en.cppreference.com/w/c/numeric" title="c/numeric"> Numerics</a></b>
+</p>
+<div class="mainpagediv">
+<p><a href="https://en.cppreference.com/w/c/numeric/math" title="c/numeric/math"> Common mathematical functions</a><br>
+<a href="https://en.cppreference.com/w/c/numeric/fenv" title="c/numeric/fenv"> Floating-point environment</a> <span class="t-mark-rev t-since-c99">(C99)</span><br>
+<a href="https://en.cppreference.com/w/c/numeric/random" title="c/numeric/random"> Pseudo-random number generation</a><br>
+<a href="https://en.cppreference.com/w/c/numeric/complex" title="c/numeric/complex"> Complex number arithmetic</a> <span class="t-mark-rev t-since-c99">(C99)</span><br>
+<a href="https://en.cppreference.com/w/c/numeric/tgmath" title="c/numeric/tgmath"> Type-generic math</a> <span class="t-mark-rev t-since-c99">(C99)</span>
+</p>
+</div>
+<p><b><a href="https://en.cppreference.com/w/c/io" title="c/io"> Input/output support</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/locale" title="c/locale"> Localization support</a></b>
+</p><p><b><a href="https://en.cppreference.com/w/c/atomic" title="c/atomic"> Atomic operations library</a></b> <span class="t-mark-rev t-since-c11">(C11)</span>
+</p><p><b><a href="https://en.cppreference.com/w/c/thread" title="c/thread"> Thread support library</a></b> <span class="t-mark-rev t-since-c11">(C11)</span>
+</p>
+</td></tr>
+<tr class="row">
+<td colspan="3"><b><a href="https://en.cppreference.com/w/c/experimental" title="c/experimental"> Technical specifications</a></b>
+<p>&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/c/experimental/dynamic" title="c/experimental/dynamic"> Dynamic memory extensions</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-dynamic-tr t-mark-ts">(dynamic memory TR)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/c/experimental/fpext1" title="c/experimental/fpext1"> Floating-point extensions, Part 1</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-fpext1-ts t-mark-ts">(FP Ext 1 TS)</span><br>
+&nbsp;&nbsp;<b><a href="https://en.cppreference.com/w/c/experimental/fpext4" title="c/experimental/fpext4"> Floating-point extensions, Part 4</a></b>&nbsp;&nbsp;<span class="t-mark-rev t-since-fpext4-ts t-mark-ts">(FP Ext 4 TS)</span><br>
+</p>
+</td></tr>
+<tr class="row rowbottom">
+<td colspan="3"> <a href="https://en.cppreference.com/w/c/links" title="c/links">External Links</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/links/libs" title="c/links/libs">Non-ANSI/ISO Libraries</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/index" title="c/index" class="mw-redirect">Index</a>&nbsp;&nbsp;−&nbsp;&nbsp;<a href="https://en.cppreference.com/w/c/symbol_index" title="c/symbol index">Symbol Index</a>
+</td></tr>
+</tbody></table>
+<table class="mainpagetable" style="padding: 2em 2em; width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" cellspacing="0">
+
+<tbody><tr class="row rowtop">
+<td> <span style="font-size: 1.5em;">News</span>
+</td></tr>
+<tr class="row rowbottom">
+<td>
+<ul><li> 7 June 2019: New version of the <a href="https://en.cppreference.com/w/Cppreference:Archives" title="Cppreference:Archives">offline archive</a>
+</li></ul>
+<ul><li> 28 October 2018: New version of the <a href="https://en.cppreference.com/w/Cppreference:Archives" title="Cppreference:Archives">offline archive</a>
+</li></ul>
+<ul><li> 11 March 2018: New version of the <a href="https://en.cppreference.com/w/Cppreference:Archives" title="Cppreference:Archives">offline archive</a>
+</li></ul>
+</td></tr></tbody></table>
+
+<!-- 
+NewPP limit report
+Preprocessor visited node count: 1179/1000000
+Preprocessor generated node count: 1459/1000000
+Post‐expand include size: 19169/2097152 bytes
+Template argument size: 3700/2097152 bytes
+Highest expansion depth: 8/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key mwiki1-mwiki_en_:pcache:idhash:1-0!*!0!*!*!*!* and timestamp 20190611112148 -->
+</div>                    <!-- /bodycontent -->
+                                        <!-- printfooter -->
+                    <div class="printfooter">
+                    Retrieved from "<a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;oldid=110059">https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;oldid=110059</a>"                    </div>
+                    <!-- /printfooter -->
+                                                            <!-- catlinks -->
+                    <div id="catlinks" class="catlinks catlinks-allhidden"></div>                    <!-- /catlinks -->
+                                                            <div class="visualClear"></div>
+                    <!-- debughtml -->
+                                        <!-- /debughtml -->
+                </div>
+                <!-- /bodyContent -->
+            </div>
+        </div>
+        <!-- /content -->
+        <!-- footer -->
+        <div id="cpp-footer-base" class="noprint">
+            <div id="footer">
+                        <div id="cpp-navigation">
+            <h5>Navigation</h5>
+            <ul>
+<li id="n-Support-us"><a href="http://www.cppreference.com/support" rel="nofollow">Support us</a></li><li id="n-recentchanges"><a href="https://en.cppreference.com/w/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-FAQ"><a href="https://en.cppreference.com/w/Cppreference:FAQ">FAQ</a></li><li id="n-Offline-version"><a href="https://en.cppreference.com/w/Cppreference:Archives">Offline version</a></li>            </ul>
+        </div>
+                        <div id="cpp-toolbox">
+            <h5><span>Toolbox</span><a href="#"></a></h5>
+            <ul>
+<li id="t-whatlinkshere"><a href="https://en.cppreference.com/w/Special:WhatLinksHere/Main_Page" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="https://en.cppreference.com/w/Special:RecentChangesLinked/Main_Page" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-upload"><a href="http://upload.cppreference.com/w/Special:Upload" title="Upload files [u]" accesskey="u">Upload file</a></li><li id="t-specialpages"><a href="https://en.cppreference.com/w/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;oldid=110059" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://en.cppreference.com/mwiki/index.php?title=Main_Page&amp;action=info">Page information</a></li>            </ul>
+        </div>
+                        <div id="cpp-languages">
+            <div><ul><li>In other languages</li></ul></div>
+            <div><ul>
+<li class="interwiki-ar"><a href="http://ar.cppreference.com/w/Main_Page" title="Main Page" hreflang="ar" lang="ar">العربية</a></li><li class="interwiki-cs"><a href="http://cs.cppreference.com/w/Main_Page" title="Main Page" hreflang="cs" lang="cs">Česky</a></li><li class="interwiki-de"><a href="http://de.cppreference.com/w/Main_Page" title="Main Page" hreflang="de" lang="de">Deutsch</a></li><li class="interwiki-es"><a href="http://es.cppreference.com/w/Main_Page" title="Main Page" hreflang="es" lang="es">Español</a></li><li class="interwiki-fr"><a href="http://fr.cppreference.com/w/Main_Page" title="Main Page" hreflang="fr" lang="fr">Français</a></li><li class="interwiki-it"><a href="http://it.cppreference.com/w/Main_Page" title="Main Page" hreflang="it" lang="it">Italiano</a></li><li class="interwiki-ja"><a href="http://ja.cppreference.com/w/Main_Page" title="Main Page" hreflang="ja" lang="ja">日本語</a></li><li class="interwiki-ko"><a href="http://ko.cppreference.com/w/Main_Page" title="Main Page" hreflang="ko" lang="ko">한국어</a></li><li class="interwiki-pl"><a href="http://pl.cppreference.com/w/Main_Page" title="Main Page" hreflang="pl" lang="pl">Polski</a></li><li class="interwiki-pt"><a href="http://pt.cppreference.com/w/Main_Page" title="Main Page" hreflang="pt" lang="pt">Português</a></li><li class="interwiki-ru"><a href="http://ru.cppreference.com/w/Main_Page" title="Main Page" hreflang="ru" lang="ru">Русский</a></li><li class="interwiki-tr"><a href="http://tr.cppreference.com/w/Main_Page" title="Main Page" hreflang="tr" lang="tr">Türkçe</a></li><li class="interwiki-zh"><a href="http://zh.cppreference.com/w/Main_Page" title="Main Page" hreflang="zh" lang="zh">中文</a></li>            </ul></div>
+        </div>
+            <ul id="footer-info">
+                                    <li id="footer-info-lastmod"> This page was last modified on 22 March 2019, at 04:58.</li>
+                                    <li id="footer-info-viewcount">This page has been accessed 23,500,862 times.</li>
+                            </ul>
+                    <ul id="footer-places">
+                                    <li id="footer-places-privacy"><a href="https://en.cppreference.com/w/Cppreference:Privacy_policy" title="Cppreference:Privacy policy">Privacy policy</a></li>
+                                    <li id="footer-places-about"><a href="https://en.cppreference.com/w/Cppreference:About" title="Cppreference:About">About cppreference.com</a></li>
+                                    <li id="footer-places-disclaimer"><a href="https://en.cppreference.com/w/Cppreference:General_disclaimer" title="Cppreference:General disclaimer">Disclaimers</a></li>
+                            </ul>
+                                    <ul id="footer-icons" class="noprint">
+                                    <li id="footer-poweredbyico">
+                                            <a href="https://www.mediawiki.org/"><img src="cppreference_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" width="88" height="31"></a>                                            <a href="http://qbnz.com/highlighter/"><img src="cppreference_files/powered_by_geshi_88x31.png" alt="Powered by GeSHi" width="88" height="31"></a>                                            <a href="http://www.tigertech.net/referral/cppreference.com"><img src="cppreference_files/powered_by_tigertech_88x31.png" alt="Hosted by Tiger Technologies" width="88" height="31"></a>                                        </li>
+                                </ul>
+                        <div style="clear:both">
+            </div>
+            </div>
+        </div>
+        <!-- /footer -->
+        <script>if(window.mw){
+mw.loader.state({"site":"loading","user":"missing","user.groups":"ready"});
+}</script>
+<script src="cppreference_files/load_005.php"></script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.page.ready","mediawiki.searchSuggest","mediawiki.hidpi","ext.gadget.ColiruCompiler","ext.gadget.MathJax"], null, true);
+}</script>
+<script src="cppreference_files/load.php"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="cppreference_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-2828341-1']);
+_gaq.push(['_setDomainName', 'cppreference.com']);
+_gaq.push(['_trackPageview']);
+</script><!-- Served in 0.196 secs. -->
+	
+
+
+<div style="display: none; font-size: 11.2px;" class="suggestions"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body><!-- Cached 20190611112148 --><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

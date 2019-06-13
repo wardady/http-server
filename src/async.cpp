@@ -47,9 +47,8 @@ public:
         auto pThis = shared_from_this();
         auto list = QString::fromStdString(
                 std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
-        std::cout << list[1].toStdString() << std::endl;
         if (list[0] != "GET") {
-            boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"),
+            boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED\n\n"),
                                      std::bind(&session::write_handler, pThis, std::placeholders::_1,
                                                std::placeholders::_2));
         } else {
@@ -57,16 +56,14 @@ public:
                 list[1] = "/index.html";
             list[1] = "../pages" + list[1];
             if (!boost::filesystem::exists(list[1].toStdString())) {
-                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"),
+                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND\n\n"),
                                          std::bind(&session::write_handler, pThis, std::placeholders::_1,
                                                    std::placeholders::_2));
             } else {
                 std::ifstream file(list[1].toStdString());
-                std::cout << list[1].toStdString() << std::endl;
                 auto ss = std::ostringstream{};
                 ss << file.rdbuf();
                 auto body = ss.str();
-                std::cout << body << std::endl;
                 boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + body),
                                          std::bind(&session::write_handler, pThis, std::placeholders::_1,
                                                    std::placeholders::_2));
@@ -76,8 +73,7 @@ public:
     }
 
     void write_handler(boost::system::error_code ec, std::size_t s) {
-        if (!ec)
-            socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
+        socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
     }
 };
 
