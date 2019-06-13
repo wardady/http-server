@@ -38,30 +38,38 @@ public:
 
     void do_read() {
         auto pThis = shared_from_this();
-        boost::asio::async_read(pThis->socket, pThis->buff, std::bind(&session::handle_http, pThis, std::placeholders::_1, std::placeholders::_2));
+        boost::asio::async_read(pThis->socket, pThis->buff,
+                                boost::asio::transfer_at_least(1),
+                                std::bind(&session::handle_http, pThis, std::placeholders::_1, std::placeholders::_2));
     }
 
     void handle_http(boost::system::error_code ec, std::size_t s) {
         auto pThis = shared_from_this();
-        auto list = QString::fromStdString(std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
+        auto list = QString::fromStdString(
+                std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
         std::cout << list[1].toStdString() << std::endl;
         if (list[0] != "GET") {
-            boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
+            boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"),
+                                     std::bind(&session::write_handler, pThis, std::placeholders::_1,
+                                               std::placeholders::_2));
         } else {
             if (list[1] == "/")
                 list[1] = "/index.html";
             list[1] = "../pages" + list[1];
             if (!boost::filesystem::exists(list[1].toStdString())) {
-                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
-            }
-            else{
+                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"),
+                                         std::bind(&session::write_handler, pThis, std::placeholders::_1,
+                                                   std::placeholders::_2));
+            } else {
                 std::ifstream file(list[1].toStdString());
                 std::cout << list[1].toStdString() << std::endl;
                 auto ss = std::ostringstream{};
                 ss << file.rdbuf();
                 auto body = ss.str();
                 std::cout << body << std::endl;
-                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + body), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
+                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + body),
+                                         std::bind(&session::write_handler, pThis, std::placeholders::_1,
+                                                   std::placeholders::_2));
             }
 
         }
@@ -126,7 +134,8 @@ public:
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
-        std::cerr << "Usage: http-server-async <address> <port> <doc_root> <threads>\n" << "Example:\n" << "    http-server-async 127.0.0.1 8080 1\n";
+        std::cerr << "Usage: http-server-async <address> <port> <doc_root> <threads>\n" << "Example:\n"
+                  << "    http-server-async 127.0.0.1 8080 1\n";
         return 1;
     }
     auto const address = boost::asio::ip::make_address(argv[1]);
@@ -140,7 +149,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::thread> v;
     v.reserve(threads - 1);
     for (auto i = threads - 1; i > 0; --i)
-        v.emplace_back([&ioc]{ ioc.run(); });
+        v.emplace_back([&ioc] { ioc.run(); });
     ioc.run();
 
     return 0;
