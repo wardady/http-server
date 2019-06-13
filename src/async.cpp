@@ -3,7 +3,7 @@
 #include <boost/asio/strand.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <boost/config.hpp>
-#include <boost/asio/read_until.hpp>
+#include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/io_service.hpp>
 #include <algorithm>
@@ -53,16 +53,22 @@ public:
     do_read() {
         auto pThis = shared_from_this();
         // Read a request
-        boost::asio::async_read_until(pThis->socket, pThis->buff, '\r', [pThis](const boost::system::error_code &e, std::size_t s) {
-            std::string line, ignore;
-
-            std::istream stream{&pThis->buff};
-
-            std::getline(stream, line, '\r');
-
-            std::getline(stream, ignore, '\n');
-            std::cout<<line<<std::endl;
+        boost::asio::async_read(pThis->socket, pThis->buff, [pThis](const boost::system::error_code &e, std::size_t s) {
+            std::ostringstream ss;
+            ss << &pThis->buff;
+            std::string string = ss.str();
+            std::cout << string << std::endl;
         });
+//        boost::asio::async_read_until(pThis->socket, pThis->buff, '\r', [pThis](const boost::system::error_code &e, std::size_t s) {
+//            std::string line, ignore;
+//
+//            std::istream stream{&pThis->buff};
+//
+//            std::getline(stream, line, '\r');
+//
+//            std::getline(stream, ignore, '\n');
+//            std::cout<<line<<std::endl;
+//        });
     }
 };
 
