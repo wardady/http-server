@@ -15,12 +15,13 @@
 #include <thread>
 #include <vector>
 #include <fstream>
+#include <QString>
+#include <QVector>
 
 using tcp = boost::asio::ip::tcp;
 
-void
-write_handler(boost::asio::ip::tcp::socket &socket, const boost::system::error_code &ec,
-              std::size_t bytes_transferred) {
+void write_handler(boost::asio::ip::tcp::socket &socket, const boost::system::error_code &ec,
+                   std::size_t bytes_transferred) {
     if (!ec)
         socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     else
@@ -59,16 +60,20 @@ public:
             std::string string = ss.str();
             std::cout << string << std::endl;
         });
-//        boost::asio::async_read_until(pThis->socket, pThis->buff, '\r', [pThis](const boost::system::error_code &e, std::size_t s) {
-//            std::string line, ignore;
-//
-//            std::istream stream{&pThis->buff};
-//
-//            std::getline(stream, line, '\r');
-//
-//            std::getline(stream, ignore, '\n');
-//            std::cout<<line<<std::endl;
-//        });
+
+    }
+
+    void handle_http() {
+        auto list = QString::fromStdString(
+                std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" |/");
+        for(auto &a:list){
+            std::cout<<a.toStdString()<<std::endl;
+        }
+        if(list[0]!="GET"){
+            // TODO WRITE ERROR 404
+        } else{
+            
+        }
     }
 };
 
