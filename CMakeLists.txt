@@ -8,8 +8,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(Threads REQUIRED)
+find_package(Qt5Core REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(async src/async.cpp)
-target_link_libraries(async Threads::Threads ${Boost_LIBRARIES})
+target_link_libraries(async Threads::Threads ${Boost_LIBRARIES} Qt5::Core)

@@ -1,84 +1,173 @@
-#include <boost/asio/io_service.hpp>
-#include <boost/asio/write.hpp>
-#include <boost/asio/buffer.hpp>
+#include <boost/asio/bind_executor.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <boost/bind.hpp>
+#include <boost/asio/strand.hpp>
+#include <boost/asio/streambuf.hpp>
+#include <boost/config.hpp>
+#include <boost/asio/read_until.hpp>
+#include <boost/asio/write.hpp>
+#include <boost/asio/io_service.hpp>
+#include <algorithm>
+#include <cstdlib>
+#include <functional>
 #include <iostream>
+#include <memory>
 #include <string>
-#include <fstream>
 #include <thread>
+#include <vector>
+#include <fstream>
 
-typedef boost::shared_ptr<boost::asio::ip::tcp::socket> socket_ptr;
+using tcp = boost::asio::ip::tcp;
 
-void write_handler(socket_ptr socket, const boost::system::error_code &ec, std::size_t bytes_transferred) {
+void
+write_handler(boost::asio::ip::tcp::socket &socket, const boost::system::error_code &ec,
+              std::size_t bytes_transferred) {
     if (!ec)
-        socket->shutdown(boost::asio::ip::tcp::socket::shutdown_send);
+        socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     else
-        // write error message
         std::cerr << "Writing error: " << ec.message() << std::endl;
 }
 
-void accept_handler(boost::asio::io_service &ioservice, socket_ptr socket, boost::asio::ip::tcp::acceptor &acceptor, const std::string &body, const boost::system::error_code &ec) {
-    if (!ec) {
-        // send response; try to shut down the socket after
-        boost::asio::async_write(*socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + body), boost::bind(write_handler, socket, _1, _2));
-        // create new socket and wait for connection
-        socket_ptr new_socket{new boost::asio::ip::tcp::socket{ioservice}};
-        acceptor.async_accept(*new_socket, boost::bind(accept_handler, std::ref(ioservice), new_socket, std::ref(acceptor), std::cref(body), _1));
-    } else
-        // write error message
-        std::cerr << "Connection error: " << ec.message() << std::endl;
+void fail(boost::system::error_code ec, char const *what) {
+    std::cerr << what << ": " << ec.message() << "\n";
 }
 
-// starts server on single thread
-void serve(boost::asio::io_service &ioservice, boost::asio::ip::tcp::acceptor &acceptor, const std::string &body) {
-    // create first socket on the thread
-    socket_ptr socket{new boost::asio::ip::tcp::socket{ioservice}};
-    // accept connection to socket; call accept_handler when connection establish
-    acceptor.async_accept(*socket, boost::bind(accept_handler, std::ref(ioservice), socket, std::ref(acceptor), std::cref(body), _1));
-    // wait until all asynchronous operations end
-    ioservice.run();
-}
-
-int main(int argc, char *argv[], char *envp[]) {
-    // usage error
-    if (argc != 5) {
-        std::cerr << "Usage: async <address> <port> <doc> <threads>\n" << std::endl;
-        return 1;
+// Handles an HTTP server connection
+class session : public std::enable_shared_from_this<session> {
+    tcp::socket socket;
+    boost::asio::streambuf buff;
+public:
+    // Take ownership of the socket
+    explicit
+    session(
+            tcp::socket socket)
+            : socket(std::move(socket)) {
     }
 
-    // parse program arguments
-    auto address = boost::asio::ip::address::from_string(argv[1]);
-    unsigned short port = static_cast<unsigned short>(std::stoi(argv[2]));
-    int threads = std::max<int>(1, std::stoi(argv[4]));
-
-    // try to open file
-    std::ifstream file(argv[3]);
-    if (file.fail()) {
-        std::cerr << "Failed to open " << argv[3] << std::endl;
-        return 1;
+    // Start the asynchronous operation
+    void
+    run() {
+        do_read();
     }
 
-    // read file
-    auto ss = std::ostringstream{};
-    ss << file.rdbuf();
-    auto body = ss.str();
+    void
+    do_read() {
+        auto pThis = shared_from_this();
+        // Read a request
+        boost::asio::async_read_until(pThis->socket, pThis->buff, '\r', [pThis](const boost::system::error_code &e, std::size_t s) {
+            std::string line, ignore;
 
-    // initialize shared asio objects
-    boost::asio::io_service ioservice{threads};
-    boost::asio::ip::tcp::endpoint ep{address, port};
-    boost::asio::ip::tcp::acceptor acceptor{ioservice, ep};
+            std::istream stream{&pThis->buff};
 
-    // create vector of one less threads because of the main one
-    std::vector<std::thread> threads_vector;
-    threads_vector.reserve(threads - 1);
+            std::getline(stream, line, '\r');
 
-    // start server
-    acceptor.listen();
-    std::cout << "Running on http://" << address.to_string() << ":" << port << "/ (Press Ctrl+C to quit)" << std::endl;
+            std::getline(stream, ignore, '\n');
+            std::cout<<line<<std::endl;
+        });
+    }
+};
+
+//------------------------------------------------------------------------------
+
+// Accepts incoming connections and launches the sessions
+class listener : public std::enable_shared_from_this<listener> {
+    tcp::acceptor acceptor_;
+    tcp::socket socket_;
+
+public:
+    listener(
+            boost::asio::io_context &ioc,
+            tcp::endpoint endpoint)
+            : acceptor_(ioc), socket_(ioc) {
+        boost::system::error_code ec;
+
+        // Open the acceptor
+        acceptor_.open(endpoint.protocol(), ec);
+        if (ec) {
+            fail(ec, "open");
+            return;
+        }
+
+        // Bind to the server address
+        acceptor_.bind(endpoint, ec);
+        if (ec) {
+            fail(ec, "bind");
+            return;
+        }
+
+        // Start listening for connections
+        acceptor_.listen(
+                boost::asio::socket_base::max_listen_connections, ec);
+        if (ec) {
+            fail(ec, "listen");
+            return;
+        }
+    }
+
+    // Start accepting incoming connections
+    void
+    run() {
+        if (!acceptor_.is_open())
+            return;
+        do_accept();
+    }
+
+    void
+    do_accept() {
+        acceptor_.async_accept(
+                socket_,
+                std::bind(
+                        &listener::on_accept,
+                        shared_from_this(),
+                        std::placeholders::_1));
+    }
+
+    void
+    on_accept(boost::system::error_code ec) {
+        if (ec) {
+            fail(ec, "accept");
+        } else {
+            // Create the session and run it
+            std::make_shared<session>(
+                    std::move(socket_))->run();
+        }
+
+        // Accept another connection
+        do_accept();
+    }
+};
+
+//------------------------------------------------------------------------------
+
+int main(int argc, char *argv[]) {
+    // Check command line arguments.
+    if (argc != 4) {
+        std::cerr <<
+                  "Usage: http-server-async <address> <port> <doc_root> <threads>\n" <<
+                  "Example:\n" <<
+                  "    http-server-async 127.0.0.1 8080 1\n";
+        return EXIT_FAILURE;
+    }
+    auto const address = boost::asio::ip::make_address(argv[1]);
+    auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
+    auto const threads = std::max<int>(1, std::atoi(argv[3]));
+
+    // The io_context is required for all I/O
+    boost::asio::io_service ioc{threads};
+
+    // Create and launch a listening port
+    std::make_shared<listener>(
+            ioc,
+            tcp::endpoint{address, port})->run();
+
+    // Run the I/O service on the requested number of threads
+    std::vector<std::thread> v;
+    v.reserve(threads - 1);
     for (auto i = threads - 1; i > 0; --i)
-        threads_vector.emplace_back(serve, std::ref(ioservice), std::ref(acceptor), std::cref(body));
-    serve(ioservice, acceptor, body);
+        v.emplace_back(
+                [&ioc] {
+                    ioc.run();
+                });
+    ioc.run();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
