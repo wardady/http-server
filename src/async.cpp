@@ -21,131 +21,103 @@
 
 using tcp = boost::asio::ip::tcp;
 
-void write_handler(boost::asio::ip::tcp::socket &socket, const boost::system::error_code &ec,
-                   std::size_t bytes_transferred) {
-    if (!ec)
-        socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
-    else
-        std::cerr << "Writing error: " << ec.message() << std::endl;
-}
-
 void fail(boost::system::error_code ec, char const *what) {
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
-// Handles an HTTP server connection
 class session : public std::enable_shared_from_this<session> {
     tcp::socket socket;
     boost::asio::streambuf buff;
 public:
-    // Take ownership of the socket
-    explicit
-    session(
-            tcp::socket socket)
-            : socket(std::move(socket)) {
-    }
+    explicit session(tcp::socket socket)
+            : socket(std::move(socket)) {}
 
-    // Start the asynchronous operation
-    void
-    run() {
+    void run() {
         do_read();
     }
 
-    void
-    do_read() {
+    void do_read() {
         auto pThis = shared_from_this();
-        boost::asio::async_read(pThis->socket, pThis->buff,
-                                std::bind(&session::handle_http, shared_from_this(), std::placeholders::_1,
-                                          std::placeholders::_2));
+        boost::asio::async_read(pThis->socket, pThis->buff, std::bind(&session::handle_http, pThis, std::placeholders::_1, std::placeholders::_2));
     }
 
     void handle_http(boost::system::error_code ec, std::size_t s) {
-        auto list = QString::fromStdString(
-                std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
+        auto pThis = shared_from_this();
+        auto list = QString::fromStdString(std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
         std::cout << list[1].toStdString() << std::endl;
         if (list[0] != "GET") {
-            // TODO WRITE ERROR 404
+            boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
         } else {
             if (list[1] == "/")
                 list[1] = "/index.html";
             list[1] = "../pages" + list[1];
             if (!boost::filesystem::exists(list[1].toStdString())) {
-                // TODO WRITE ERROR 404
+                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
             }
             else{
-                // TODO WRITE PAGE
+                std::ifstream file(list[1].toStdString());
+                std::cout << list[1].toStdString() << std::endl;
+                auto ss = std::ostringstream{};
+                ss << file.rdbuf();
+                auto body = ss.str();
+                std::cout << body << std::endl;
+                boost::asio::async_write(pThis->socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + body), std::bind(&session::write_handler, pThis, std::placeholders::_1, std::placeholders::_2));
             }
 
         }
     }
+
+    void write_handler(boost::system::error_code ec, std::size_t s) {
+        if (!ec)
+            socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
+    }
 };
 
-//------------------------------------------------------------------------------
-
-// Accepts incoming connections and launches the sessions
 class listener : public std::enable_shared_from_this<listener> {
     tcp::acceptor acceptor_;
     tcp::socket socket_;
 
 public:
-    listener(
-            boost::asio::io_context &ioc,
-            tcp::endpoint endpoint)
+    listener(boost::asio::io_context &ioc, tcp::endpoint endpoint)
             : acceptor_(ioc), socket_(ioc) {
         boost::system::error_code ec;
 
-        // Open the acceptor
         acceptor_.open(endpoint.protocol(), ec);
         if (ec) {
             fail(ec, "open");
             return;
         }
 
-        // Bind to the server address
         acceptor_.bind(endpoint, ec);
         if (ec) {
             fail(ec, "bind");
             return;
         }
 
-        // Start listening for connections
-        acceptor_.listen(
-                boost::asio::socket_base::max_listen_connections, ec);
+        acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
         if (ec) {
             fail(ec, "listen");
             return;
         }
     }
 
-    // Start accepting incoming connections
-    void
-    run() {
+    void run() {
         if (!acceptor_.is_open())
             return;
         do_accept();
     }
 
-    void
-    do_accept() {
-        acceptor_.async_accept(
-                socket_,
-                std::bind(
-                        &listener::on_accept,
-                        shared_from_this(),
-                        std::placeholders::_1));
+    void do_accept() {
+        acceptor_.async_accept(socket_, std::bind(&listener::on_accept, shared_from_this(), std::placeholders::_1));
     }
 
-    void
-    on_accept(boost::system::error_code ec) {
+    void on_accept(boost::system::error_code ec) {
         if (ec) {
             fail(ec, "accept");
         } else {
-            // Create the session and run it
-            std::make_shared<session>(
-                    std::move(socket_))->run();
+            std::make_shared<session>(std::move(socket_))->run();
         }
 
-        // Accept another connection
         do_accept();
     }
 };
@@ -153,35 +125,23 @@ public:
 //------------------------------------------------------------------------------
 
 int main(int argc, char *argv[]) {
-    // Check command line arguments.
     if (argc != 4) {
-        std::cerr <<
-                  "Usage: http-server-async <address> <port> <doc_root> <threads>\n" <<
-                  "Example:\n" <<
-                  "    http-server-async 127.0.0.1 8080 1\n";
-        return EXIT_FAILURE;
+        std::cerr << "Usage: http-server-async <address> <port> <doc_root> <threads>\n" << "Example:\n" << "    http-server-async 127.0.0.1 8080 1\n";
+        return 1;
     }
     auto const address = boost::asio::ip::make_address(argv[1]);
-    auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
-    auto const threads = std::max<int>(1, std::atoi(argv[3]));
+    auto const port = static_cast<unsigned short>(std::stoi(argv[2]));
+    auto const threads = std::max<int>(1, std::stoi(argv[3]));
 
-    // The io_context is required for all I/O
     boost::asio::io_service ioc{threads};
 
-    // Create and launch a listening port
-    std::make_shared<listener>(
-            ioc,
-            tcp::endpoint{address, port})->run();
+    std::make_shared<listener>(ioc, tcp::endpoint{address, port})->run();
 
-    // Run the I/O service on the requested number of threads
     std::vector<std::thread> v;
     v.reserve(threads - 1);
     for (auto i = threads - 1; i > 0; --i)
-        v.emplace_back(
-                [&ioc] {
-                    ioc.run();
-                });
+        v.emplace_back([&ioc]{ ioc.run(); });
     ioc.run();
 
-    return EXIT_SUCCESS;
+    return 0;
 }
