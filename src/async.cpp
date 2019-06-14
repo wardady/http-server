@@ -22,32 +22,41 @@ public:
 
     void run() { on_connect(); }
 
+    // read client's http request
     void on_connect() {
         boost::asio::async_read(socket, buff, boost::asio::transfer_at_least(1),
                                 std::bind(&session::on_read, shared_from_this(), std::placeholders::_1,
                                           std::placeholders::_2));
     }
 
+    // callback for reading client's http request
     void on_read(boost::system::error_code ec, std::size_t s) {
         if (!ec) {
+            // split request by space
             auto list = QString::fromStdString(
                     std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
+
             if (list[0] != "GET")
+                // only GET requests are supported
                 boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"),
                                          std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                    std::placeholders::_2));
             else {
+                // if no file requested return index.html
                 if (list[1] == "/") list[1] = "/index.html";
                 std::string doc = doc_root + list[1].toStdString();
                 if (!boost::filesystem::exists(doc))
+                    // file does not exist - send 404 error
                     boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 else {
+                    // synchronous file reading - blocking function
                     std::ifstream file(doc);
                     auto ostringstream = std::ostringstream{};
                     ostringstream << file.rdbuf();
                     auto document = ostringstream.str();
+                    // send file
                     boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + document),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
@@ -57,8 +66,10 @@ public:
             std::cerr << ec.message() << std::endl;
     }
 
+    // callback for writing http reply
     void on_write(boost::system::error_code ec, std::size_t s) {
         if (!ec)
+            // close connection
             socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
         else
             std::cerr << ec.message() << std::endl;
@@ -74,6 +85,7 @@ public:
             : acceptor_(ioc), socket_(ioc), doc_root_(doc_root) {
         boost::system::error_code ec;
 
+        // initialize acceptor by endpoint
         acceptor_.open(endpoint.protocol(), ec);
         acceptor_.bind(endpoint, ec);
         acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
@@ -84,6 +96,7 @@ public:
         }
     }
 
+    // start accepting connections
     void run() {
         if (!acceptor_.is_open())
             return;
@@ -92,34 +105,42 @@ public:
         do_accept();
     }
 
+    // accept connections
     void do_accept() {
         acceptor_.async_accept(socket_, std::bind(&listener::on_accept, shared_from_this(), std::placeholders::_1));
     }
 
+    // callback for establishing connection
     void on_accept(boost::system::error_code ec) {
         if (!ec)
+            // initialize session
             std::make_shared<session>(std::move(socket_), doc_root_)->run();
         else
             std::cerr << ec.message() << std::endl;
+        // accept next connection
         do_accept();
     }
 };
 
 int main(int argc, char *argv[]) {
+    // check command line arguments number
     if (argc != 5) {
         std::cerr << "Usage: async <address> <port> <doc_root> <threads>" << std::endl;
         return 1;
     }
 
+    // process command line arguments
     auto const address = boost::asio::ip::make_address(argv[1]);
     auto const port = static_cast<unsigned short>(std::stoi(argv[2]));
     std::string doc_root = argv[3];
     auto const threads = std::max<int>(1, std::stoi(argv[4]));
 
+    // create ioservice shared between all threads
     boost::asio::io_service ioc{threads};
-
+    // initialize and run listener
     std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{address, port}, doc_root)->run();
 
+    // run ioservice in every thread
     std::vector<std::thread> thread_vector;
     thread_vector.reserve(threads - 1);
     for (auto i = threads - 1; i > 0; --i)
