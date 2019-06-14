@@ -28,7 +28,7 @@
      mkdir build && cd build
      cmake -G"Unix Makefiles" ..
      make
-     
+     ```
   3. Run async with wanted IP-adress, port, path to a served documents and a number of threads.
      
      Example: async 127.0.0.1 8080 /srv/http 4
@@ -58,5 +58,3 @@ See also the list of [contributors](https://github.com/chernetskyi/http-server/c
 This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
 © 2019 Volodymyr Chernetskyi, Hermann Yavorskyi, Andrii Koval, Petro Franchuk
-
-```
