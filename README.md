@@ -31,7 +31,7 @@
      ```
   3. Run async with wanted IP-adress, port, path to a served documents and a number of threads.
      
-     Example: async 127.0.0.1 8080 /srv/http 4
+     Example: `async 127.0.0.1 8080 /srv/http 4`
   4. Enjoy! :tada:
 
 ### Usage 
