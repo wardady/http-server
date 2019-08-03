@@ -64,7 +64,7 @@ public:
                 }
             }
         } else
-            std::cerr << ec.message() << std::endl;
+            std::cerr << "Reading request error: " << ec.message() << std::endl;
     }
 
     // callback for writing http reply
@@ -73,7 +73,7 @@ public:
             // close connection
             socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
         else
-            std::cerr << ec.message() << std::endl;
+            std::cerr << "Writing reply error: " << ec.message() << std::endl;
     }
 };
 
@@ -92,7 +92,7 @@ public:
         acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
 
         if (ec) {
-            std::cerr << ec.message() << std::endl;
+            std::cerr << "Listener creation error: " << ec.message() << std::endl;
             return;
         }
     }
@@ -117,7 +117,7 @@ public:
             // initialize session
             std::make_shared<session>(std::move(socket_), doc_root_)->run();
         else
-            std::cerr << ec.message() << std::endl;
+            std::cerr << "Accepting connection error: " << ec.message() << std::endl;
         // accept next connection
         do_accept();
     }
