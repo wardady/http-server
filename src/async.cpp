@@ -8,9 +8,7 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <fstream>
 #include <QString>
-#include <QVector>
 #include <QStringList>
 
 class session : public std::enable_shared_from_this<session> {
