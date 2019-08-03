@@ -10,6 +10,7 @@ endif()
 find_package(Threads REQUIRED)
 find_package(Qt5Core REQUIRED COMPONENTS QString QVector)
 find_package(Boost REQUIRED COMPONENTS system filesystem)
+set(Boost_USE_MULTITHREADED ON)
 include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(async src/async.cpp)
