@@ -1,15 +1,21 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/io_service.hpp>
+
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/fusion/include/iterator_range.hpp>
 #include <boost/filesystem.hpp>
+
 #include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
-#include <QString>
-#include <QStringList>
 
 class session : public std::enable_shared_from_this<session> {
     boost::asio::ip::tcp::socket socket;
@@ -32,18 +38,21 @@ public:
     void on_read(boost::system::error_code ec, std::size_t s) {
         if (!ec) {
             // split request by space
-            auto list = QString::fromStdString(
-                    std::string((std::istreambuf_iterator<char>(&buff)), std::istreambuf_iterator<char>())).split(" ");
+            std::vector<std::string> list;
+            // Взагалі, тут копіювання може й зайве, але boost::iterator_range щось капризує, то поки, для економії часу, так.
+            auto input_string = std::string(std::istreambuf_iterator<char>(&buff), std::istreambuf_iterator<char>());
+            boost::split(list, input_string, boost::is_any_of(" "));
 
-            if (list[0] != "GET")
+            if (list[0] != "GET") {
                 // only GET requests are supported
                 boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"),
                                          std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                    std::placeholders::_2));
-            else {
+            } else {
+                std::string& url_file_path = list[1];
                 // if no file requested return index.html
-                if (list[1] == "/") list[1] = "/index.html";
-                std::string doc = doc_root + list[1].toStdString();
+                if (url_file_path == "/") url_file_path = "/index.html";
+                std::string doc = doc_root + url_file_path;
                 if (!boost::filesystem::exists(doc))
                     // file does not exist - send 404 error
                     boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"),
@@ -129,15 +138,15 @@ int main(int argc, char *argv[]) {
     }
 
     // process command line arguments
-    auto const address = boost::asio::ip::make_address(argv[1]);
+
     auto const port = static_cast<unsigned short>(std::stoi(argv[2]));
     std::string doc_root = argv[3];
-    auto const threads = std::max<int>(1, std::stoi(argv[4]));
+    const int threads = std::max(1, std::stoi(argv[4]));
 
     // create ioservice shared between all threads
     boost::asio::io_service ioc{threads};
     // initialize and run listener
-    std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{address, port}, doc_root)->run();
+    std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{boost::asio::ip::tcp::v4(), port}, doc_root)->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;
