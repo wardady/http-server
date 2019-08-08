@@ -132,16 +132,15 @@ public:
 
 int main(int argc, char *argv[]) {
     // check command line arguments number
-    if (argc != 5) {
-        std::cerr << "Usage: async <address> <port> <doc_root> <threads>" << std::endl;
+    if (argc != 4) {
+        std::cerr << "Usage: async <port> <doc_root> <threads>" << std::endl;
         return 1;
     }
 
     // process command line arguments
-
-    auto const port = static_cast<unsigned short>(std::stoi(argv[2]));
-    std::string doc_root = argv[3];
-    const int threads = std::max(1, std::stoi(argv[4]));
+    auto const port = static_cast<unsigned short>(std::stoi(argv[1]));
+    std::string doc_root = argv[2];
+    const int threads = std::max(1, std::stoi(argv[3]));
 
     // create ioservice shared between all threads
     boost::asio::io_service ioc{threads};
