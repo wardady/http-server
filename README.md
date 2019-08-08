@@ -19,30 +19,22 @@
 ## Getting started
 
 ### Prerequisites
-  For this project `qt` and `boost` libraries are needed :neckbeard:
+   - Boost 1.70
+   > Boost 1.66-1.69 may work too - has not been tested yet. 1.65 or older are definitely uncompatible. Regarding updating Boost on Ubuntu 16/18, look [here](https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html). Uninstallation of previous boost-dev packages might be necessary.   
+   - CMake 3.10 or newer
 
 ### Installing
-1. Pre-requirements: 
-   - Boost 1.70, 
-   - Qt5, 
-   - CMake 3.10 or newer.   
-    
-2. Clone project.
-3. Compile project.
+1. Clone project.
+2. Compile project.
      ```bash
      mkdir build && cd build
      cmake -G"Unix Makefiles" ..
      make
      ```
-4. Run async with wanted IP-adress, port, path to a served documents and a number of threads.
+3. Run async with wanted port, path to a served documents and a number of threads.
      
-     Example: `async 127.0.0.1 8080 /srv/http 4`
-5. Enjoy! :tada:
-
-Boost 1.66-1.69 may work too - not tested. 1.65 and older definitely uncompatible. 
-Regarding updating boost on Ubuntu 16/18, see
- [here](https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html). 
- Uninstallation of previous boost-dev packages might be necessary.   
+     Example: `async 8080 /srv/http 4`
+4. Enjoy! :tada:
 
 ### Usage 
 Simply open the webpage in the browser :globe_with_meridians:
@@ -59,6 +51,10 @@ Pull requests :octocat: are welcome. For major changes, please open an issue fir
 | Andrii Koval | Petro Franchuk |
 | <img src="https://upload.wikimedia.org/wikipedia/ru/2/23/Red_Raphael.jpg"> | <img src="https://upload.wikimedia.org/wikipedia/ru/f/f9/Red_Michelangelo.jpg"> |
 | [andrwkoval](https://github.com/andrwkoval) | [franchukpetro](https://github.com/franchukpetro) |
+| Oleg Farenyuk | Yulianna Tymchenko |
+| <img src="https://www.ninjaturtles.ru/forum/pic/12843.jpg"> | <img src="https://vignette.wikia.nocookie.net/tmnt-polska/images/2/2d/April-1987.png/revision/latest?cb=20160503145802&path-prefix=pl"> |
+| [indrekis](https://github.com/indrekis) | [neverlandjt](https://github.com/neverlandjt) |
+
 
 See also the list of [contributors](https://github.com/chernetskyi/http-server/contributors) who participated in this project.
 
@@ -67,4 +63,4 @@ See also the list of [contributors](https://github.com/chernetskyi/http-server/c
 
 This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
-© 2019 Volodymyr Chernetskyi, Hermann Yavorskyi, Andrii Koval, Petro Franchuk
+© 2019 Volodymyr Chernetskyi, Hermann Yavorskyi, Andrii Koval, Petro Franchuk, Yulianna Tymchenko, Oleg Farenyuk
