@@ -45,7 +45,7 @@ public:
 
             if (list[0] != "GET") {
                 // only GET requests are supported
-                boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED"),
+                boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED \n\n <html><body><h1>501 Not Implemented</h1></body></html>"),
                                          std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                    std::placeholders::_2));
             } else {
@@ -55,7 +55,7 @@ public:
                 std::string doc = doc_root + url_file_path;
                 if (!boost::filesystem::exists(doc))
                     // file does not exist - send 404 error
-                    boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND"),
+                    boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND\n\n <html><body><h1>404 Not Found</h1></body></html>" ),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 else {
