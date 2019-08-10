@@ -17,6 +17,9 @@
 #include <thread>
 #include <vector>
 
+constexpr char msg_404_buffer[] = "HTTP/1.1 404 NOT FOUND\n\n <html><body><h1>404 Not Found</h1></body></html>";
+constexpr char msg_501_buffer[] = "HTTP/1.1 501 NOT IMPLEMENTED \n\n <html><body><h1>501 Not Implemented</h1></body></html>";
+
 class session : public std::enable_shared_from_this<session> {
     boost::asio::ip::tcp::socket socket;
     boost::asio::streambuf buff;
@@ -45,7 +48,7 @@ public:
 
             if (list[0] != "GET") {
                 // only GET requests are supported
-                boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 501 NOT IMPLEMENTED \n\n <html><body><h1>501 Not Implemented</h1></body></html>"),
+                boost::asio::async_write(socket, boost::asio::buffer( msg_501_buffer ),
                                          std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                    std::placeholders::_2));
             } else {
@@ -55,7 +58,7 @@ public:
                 std::string doc = doc_root + url_file_path;
                 if (!boost::filesystem::exists(doc))
                     // file does not exist - send 404 error
-                    boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 404 NOT FOUND\n\n <html><body><h1>404 Not Found</h1></body></html>" ),
+                    boost::asio::async_write(socket, boost::asio::buffer( msg_404_buffer ),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 else {
