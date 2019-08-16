@@ -24,6 +24,7 @@ class session : public std::enable_shared_from_this<session> {
     boost::asio::ip::tcp::socket socket;
     boost::asio::streambuf buff;
     const std::string &doc_root;
+    std::string send_ok_response;
 public:
     explicit session(boost::asio::ip::tcp::socket socket, const std::string &doc_root)
             : socket(std::move(socket)), doc_root(doc_root) {}
@@ -68,8 +69,8 @@ public:
                     ostringstream << file.rdbuf();
                     auto document = ostringstream.str();
                     // send file
-                    auto buffer = boost::asio::buffer("HTTP/1.1 200 OK\n\n" + document);
-                    boost::asio::async_write(socket, buffer,
+                    send_ok_response = "HTTP/1.1 200 OK\n\n" + document;
+                    boost::asio::async_write(socket, boost::asio::buffer(send_ok_response),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 }
