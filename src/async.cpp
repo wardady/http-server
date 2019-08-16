@@ -68,7 +68,8 @@ public:
                     ostringstream << file.rdbuf();
                     auto document = ostringstream.str();
                     // send file
-                    boost::asio::async_write(socket, boost::asio::buffer("HTTP/1.1 200 OK\n\n" + document),
+                    auto buffer = boost::asio::buffer("HTTP/1.1 200 OK\n\n" + document);
+                    boost::asio::async_write(socket, buffer,
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 }
