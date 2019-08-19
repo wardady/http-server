@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(Threads REQUIRED)
-find_package(Boost 1.69 REQUIRED COMPONENTS system filesystem)
+find_package(Boost 1.69 REQUIRED COMPONENTS system filesystem program_options)
 set(Boost_USE_MULTITHREADED ON)
 include_directories(${Boost_INCLUDE_DIRS})
 

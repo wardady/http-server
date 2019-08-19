@@ -11,6 +11,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/fusion/include/iterator_range.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 
 #include <iostream>
 #include <string>
@@ -136,21 +137,53 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    // check command line arguments number
-    if (argc != 4) {
-        std::cerr << "Usage: async <port> <doc_root> <threads>" << std::endl;
+    // define options to be shown on --help
+    boost::program_options::options_description basic_options("Options");
+    basic_options.add_options()
+        ("help", "print help message")
+        ("port,p", boost::program_options::value<uint16_t>(), "specify port number")
+        ("threads,t", boost::program_options::value<int>()->default_value(2), "specify number of threads to use");
+
+    // define hidden options
+    boost::program_options::options_description hidden_options("Hidden options");
+    hidden_options.add_options()
+            ("directory,d", boost::program_options::value<std::string>(), "directory to serve from");
+
+    boost::program_options::options_description options;
+    options.add(basic_options).add(hidden_options);
+
+    // define positional options
+    boost::program_options::positional_options_description positional;
+    positional.add("directory", 1);
+
+    boost::program_options::variables_map vm;
+    auto parsed = boost::program_options::command_line_parser(argc, argv).options(options).positional(positional).run();
+    boost::program_options::store(parsed, vm);
+
+    // show help message
+    if (vm.count("help")) {
+        std::cout << basic_options << std::endl;
+        return 0;
+    }
+
+    // port is not specified
+    if (!vm.count("port")) {
+        std::cout << "Port to use is not specified" << std::endl;
         return 1;
     }
 
-    // process command line arguments
-    auto const port = static_cast<unsigned short>(std::stoi(argv[1]));
-    std::string doc_root = argv[2];
-    const int threads = std::max(1, std::stoi(argv[3]));
+    // directory is not specified
+    if (!vm.count("directory")) {
+        std::cout << "Directory to serve from is not specified" << std::endl;
+        return 1;
+    }
+
+    auto threads = std::max(1, vm["threads"].as<int>());
 
     // create ioservice shared between all threads
     boost::asio::io_service ioc{threads};
     // initialize and run listener
-    std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{boost::asio::ip::tcp::v4(), port}, doc_root)->run();
+    std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{boost::asio::ip::tcp::v4(), vm["port"].as<uint16_t >()}, vm["directory"].as<std::string>())->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;

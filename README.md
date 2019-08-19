@@ -19,8 +19,8 @@
 ## Getting started
 
 ### Prerequisites
-   - Boost 1.70
-   > Boost 1.66-1.69 may work too - has not been tested yet. 1.65 or older are definitely uncompatible. Regarding updating Boost on Ubuntu 16/18, look [here](https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html). Uninstallation of previous boost-dev packages might be necessary.   
+   - Boost 1.69 or newer
+   > Boost 1.65 or older is incompatible. Regarding updating Boost on Ubuntu 16/18, look [here](https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html). Uninstallation of previous boost-dev packages might be necessary.   
    - CMake 3.10 or newer
 
 ### Installing
@@ -31,9 +31,9 @@
      cmake -G"Unix Makefiles" ..
      make
      ```
-3. Run async with wanted port, path to a served documents and a number of threads.
+3. Run async specifying at least wanted port and a path for served documents. Run with `--help` to learn more about command line options.
      
-     Example: `async 8080 /srv/http 4`
+     Example: `async -p 8080 /srv/http`
 4. Enjoy! :tada:
 
 ### Usage 
