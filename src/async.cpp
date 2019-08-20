@@ -21,20 +21,23 @@
 constexpr char msg_404_buffer[] = "HTTP/1.1 404 NOT FOUND\n\n <html><body><h1>404 Not Found</h1></body></html>";
 constexpr char msg_501_buffer[] = "HTTP/1.1 501 NOT IMPLEMENTED \n\n <html><body><h1>501 Not Implemented</h1></body></html>";
 
+namespace asio = boost::asio;
+namespace po = boost::program_options;
+
 class session : public std::enable_shared_from_this<session> {
-    boost::asio::ip::tcp::socket socket;
-    boost::asio::streambuf buff;
+    asio::ip::tcp::socket socket;
+    asio::streambuf buff;
     const std::string &doc_root;
     std::string send_ok_response;
 public:
-    explicit session(boost::asio::ip::tcp::socket socket, const std::string &doc_root)
+    explicit session(asio::ip::tcp::socket socket, const std::string &doc_root)
             : socket(std::move(socket)), doc_root(doc_root) {}
 
     void run() { on_connect(); }
 
     // read client's http request
     void on_connect() {
-        boost::asio::async_read(socket, buff, boost::asio::transfer_at_least(1),
+        asio::async_read(socket, buff, asio::transfer_at_least(1),
                                 std::bind(&session::on_read, shared_from_this(), std::placeholders::_1,
                                           std::placeholders::_2));
     }
@@ -50,7 +53,7 @@ public:
 
             if (list[0] != "GET") {
                 // only GET requests are supported
-                boost::asio::async_write(socket, boost::asio::buffer( msg_501_buffer ),
+                asio::async_write(socket, asio::buffer( msg_501_buffer ),
                                          std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                    std::placeholders::_2));
             } else {
@@ -60,7 +63,7 @@ public:
                 std::string doc = doc_root + url_file_path;
                 if (!boost::filesystem::exists(doc))
                     // file does not exist - send 404 error
-                    boost::asio::async_write(socket, boost::asio::buffer( msg_404_buffer ),
+                    asio::async_write(socket, asio::buffer( msg_404_buffer ),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 else {
@@ -71,7 +74,7 @@ public:
                     auto document = ostringstream.str();
                     // send file
                     send_ok_response = "HTTP/1.1 200 OK\n\n" + document;
-                    boost::asio::async_write(socket, boost::asio::buffer(send_ok_response),
+                    asio::async_write(socket, asio::buffer(send_ok_response),
                                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                                        std::placeholders::_2));
                 }
@@ -84,25 +87,25 @@ public:
     void on_write(boost::system::error_code ec, std::size_t s) {
         if (!ec)
             // close connection
-            socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
+            socket.shutdown(asio::ip::tcp::socket::shutdown_send, ec);
         else
             std::cerr << "Writing reply error: " << ec.message() << std::endl;
     }
 };
 
 class listener : public std::enable_shared_from_this<listener> {
-    boost::asio::ip::tcp::acceptor acceptor_;
-    boost::asio::ip::tcp::socket socket_;
+    asio::ip::tcp::acceptor acceptor_;
+    asio::ip::tcp::socket socket_;
     const std::string &doc_root_;
 public:
-    listener(boost::asio::io_context &ioc, boost::asio::ip::tcp::endpoint endpoint, const std::string &doc_root)
+    listener(asio::io_context &ioc, asio::ip::tcp::endpoint endpoint, const std::string &doc_root)
             : acceptor_(ioc), socket_(ioc), doc_root_(doc_root) {
         boost::system::error_code ec;
 
         // initialize acceptor by endpoint
         acceptor_.open(endpoint.protocol(), ec);
         acceptor_.bind(endpoint, ec);
-        acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
+        acceptor_.listen(asio::socket_base::max_listen_connections, ec);
 
         if (ec) {
             std::cerr << "Listener creation error: " << ec.message() << std::endl;
@@ -138,27 +141,27 @@ public:
 
 int main(int argc, char *argv[]) {
     // define options to be shown on --help
-    boost::program_options::options_description basic_options("Options");
+    po::options_description basic_options("Options");
     basic_options.add_options()
         ("help", "print help message")
-        ("port,p", boost::program_options::value<uint16_t>(), "specify port number")
-        ("threads,t", boost::program_options::value<int>()->default_value(2), "specify number of threads to use");
+        ("port,p", po::value<uint16_t>(), "specify port number")
+        ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use");
 
     // define hidden options
-    boost::program_options::options_description hidden_options("Hidden options");
+    po::options_description hidden_options("Hidden options");
     hidden_options.add_options()
-            ("directory,d", boost::program_options::value<std::string>(), "directory to serve from");
+            ("directory,d", po::value<std::string>(), "directory to serve from");
 
-    boost::program_options::options_description options;
+    po::options_description options;
     options.add(basic_options).add(hidden_options);
 
     // define positional options
-    boost::program_options::positional_options_description positional;
+    po::positional_options_description positional;
     positional.add("directory", 1);
 
-    boost::program_options::variables_map vm;
-    auto parsed = boost::program_options::command_line_parser(argc, argv).options(options).positional(positional).run();
-    boost::program_options::store(parsed, vm);
+    po::variables_map vm;
+    auto parsed = po::command_line_parser(argc, argv).options(options).positional(positional).run();
+    po::store(parsed, vm);
 
     // show help message
     if (vm.count("help")) {
@@ -181,9 +184,9 @@ int main(int argc, char *argv[]) {
     auto threads = std::max(1, vm["threads"].as<int>());
 
     // create ioservice shared between all threads
-    boost::asio::io_service ioc{threads};
+    asio::io_service ioc{threads};
     // initialize and run listener
-    std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{boost::asio::ip::tcp::v4(), vm["port"].as<uint16_t >()}, vm["directory"].as<std::string>())->run();
+    std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(), vm["port"].as<uint16_t >()}, vm["directory"].as<std::string>())->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;
