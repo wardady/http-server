@@ -25,9 +25,9 @@ namespace po = boost::program_options;
 
 class session : public std::enable_shared_from_this<session> {
     asio::ip::tcp::socket socket;
-    asio::streambuf buff;
+    asio::streambuf read_buff;
+    asio::streambuf write_buff;
     const std::string &doc_root;
-    std::string send_ok_response;
 public:
     explicit session(asio::ip::tcp::socket socket, const std::string &doc_root)
             : socket(std::move(socket)), doc_root(doc_root) {}
@@ -36,7 +36,7 @@ public:
 
     // read client's http request
     void on_connect() {
-        asio::async_read(socket, buff, asio::transfer_at_least(1),
+        asio::async_read(socket, read_buff, asio::transfer_at_least(1),
                                 std::bind(&session::on_read, shared_from_this(), std::placeholders::_1,
                                           std::placeholders::_2));
     }
@@ -44,17 +44,16 @@ public:
     // callback for reading client's http request
     void on_read(boost::system::error_code ec, std::size_t s) {
         if (!ec) {
+            std::ostream out(&write_buff);
             // split request by space
             std::vector<std::string> list;
             // Взагалі, тут копіювання може й зайве, але boost::iterator_range щось капризує, то поки, для економії часу, так.
-            auto input_string = std::string(std::istreambuf_iterator<char>(&buff), std::istreambuf_iterator<char>());
+            auto input_string = std::string(std::istreambuf_iterator<char>(&read_buff), std::istreambuf_iterator<char>());
             boost::split(list, input_string, boost::is_any_of(" "));
 
             if (list[0] != "GET") {
                 // only GET requests are supported
-                asio::async_write(socket, asio::buffer( msg_501_buffer ),
-                                         std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
-                                                   std::placeholders::_2));
+                out << msg_501_buffer << std::endl;
             } else {
                 std::string& url_file_path = list[1];
                 // if no file requested return index.html
@@ -62,22 +61,16 @@ public:
                 std::string doc = doc_root + url_file_path;
                 if (!boost::filesystem::exists(doc))
                     // file does not exist - send 404 error
-                    asio::async_write(socket, asio::buffer( msg_404_buffer ),
-                                             std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
-                                                       std::placeholders::_2));
+                    out << msg_404_buffer << std::endl;
                 else {
                     // synchronous file reading - blocking function
                     std::ifstream file(doc);
-                    auto ostringstream = std::ostringstream{};
-                    ostringstream << file.rdbuf();
-                    auto document = ostringstream.str();
-                    // send file
-                    send_ok_response = "HTTP/1.1 200 OK\n\n" + document;
-                    asio::async_write(socket, asio::buffer(send_ok_response),
-                                             std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
-                                                       std::placeholders::_2));
+                    out << "HTTP/1.1 200 OK\n\n" << file.rdbuf() << std::endl;
                 }
             }
+            asio::async_write(socket, write_buff,
+                              std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
+                                        std::placeholders::_2));
         } else
             std::cerr << "Reading request error: " << ec.message() << std::endl;
     }
