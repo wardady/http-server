@@ -9,7 +9,6 @@
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
-#include <boost/fusion/include/iterator_range.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
