@@ -97,7 +97,7 @@ class listener : public std::enable_shared_from_this<listener> {
     asio::ip::tcp::socket socket_;
     const std::string &doc_root_;
 public:
-    listener(asio::io_context &ioc, asio::ip::tcp::endpoint endpoint, const std::string &doc_root)
+    listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root)
             : acceptor_(ioc), socket_(ioc), doc_root_(doc_root) {
         boost::system::error_code ec;
 
