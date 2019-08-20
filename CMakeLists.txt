@@ -21,7 +21,7 @@ elseif(MSVC)
 endif()
 
 include_directories(./inc)
-add_library(http SHARED inc/http.h src/http.cpp)
+add_library(http SHARED inc/http.h src/http.cpp ${Boost_LIBRARIES})
 
 add_executable(async src/async.cpp)
-target_link_libraries(async Threads::Threads ${Boost_LIBRARIES} ${ADDITIONAL_LIBRARIES})
+target_link_libraries(async Threads::Threads ${Boost_LIBRARIES} ${ADDITIONAL_LIBRARIES} http)

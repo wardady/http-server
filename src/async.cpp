@@ -7,9 +7,6 @@
 #include <boost/asio/write.hpp>
 #include <boost/asio/io_service.hpp>
 
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include <iostream>
@@ -17,8 +14,7 @@
 #include <thread>
 #include <vector>
 
-constexpr char msg_404_buffer[] = "HTTP/1.1 404 NOT FOUND\n\n <html><body><h1>404 Not Found</h1></body></html>";
-constexpr char msg_501_buffer[] = "HTTP/1.1 501 NOT IMPLEMENTED \n\n <html><body><h1>501 Not Implemented</h1></body></html>";
+#include "http.h"
 
 namespace asio = boost::asio;
 namespace po = boost::program_options;
@@ -44,30 +40,8 @@ public:
     // callback for reading client's http request
     void on_read(boost::system::error_code ec, std::size_t s) {
         if (!ec) {
-            std::ostream out(&write_buff);
-            // split request by space
-            std::vector<std::string> list;
-            // Взагалі, тут копіювання може й зайве, але boost::iterator_range щось капризує, то поки, для економії часу, так.
-            auto input_string = std::string(std::istreambuf_iterator<char>(&read_buff), std::istreambuf_iterator<char>());
-            boost::split(list, input_string, boost::is_any_of(" "));
-
-            if (list[0] != "GET") {
-                // only GET requests are supported
-                out << msg_501_buffer << std::endl;
-            } else {
-                std::string& url_file_path = list[1];
-                // if no file requested return index.html
-                if (url_file_path == "/") url_file_path = "/index.html";
-                std::string doc = doc_root + url_file_path;
-                if (!boost::filesystem::exists(doc))
-                    // file does not exist - send 404 error
-                    out << msg_404_buffer << std::endl;
-                else {
-                    // synchronous file reading - blocking function
-                    std::ifstream file(doc);
-                    out << "HTTP/1.1 200 OK\n\n" << file.rdbuf() << std::endl;
-                }
-            }
+            http::request req(read_buff);
+            req.write_response(write_buff, doc_root);
             asio::async_write(socket, write_buff,
                               std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                         std::placeholders::_2));
