@@ -20,5 +20,8 @@ elseif(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_WIN32_WINNT=0x0601 /D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING")
 endif()
 
+include_directories(./inc)
+add_library(http SHARED inc/http.h src/http.cpp)
+
 add_executable(async src/async.cpp)
 target_link_libraries(async Threads::Threads ${Boost_LIBRARIES} ${ADDITIONAL_LIBRARIES})
