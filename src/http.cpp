@@ -3,6 +3,7 @@
 #include <boost/filesystem.hpp>
 #include "http.h"
 #include "casher.h"
+#include <boost/algorithm/string/trim.hpp>
 
 namespace http {
     request::request(asio::streambuf &buff) {
@@ -12,6 +13,7 @@ namespace http {
         method = list[0];
         URI = list[1];
         version = list[2];
+        boost::algorithm::trim(version);
     }
 
     void request::write_response(asio::streambuf &buff, const std::string &doc_root, casher &cash) {
