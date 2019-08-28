@@ -3,6 +3,7 @@
 
 #include <boost/asio/streambuf.hpp>
 #include <string>
+#include "casher.h"
 
 namespace asio = boost::asio;
 
@@ -19,7 +20,7 @@ namespace http {
         std::string version;
     public:
         explicit request(asio::streambuf &buff);
-        void write_response(asio::streambuf &buff, const std::string &doc_root);
+        void write_response(asio::streambuf &buff, const std::string &doc_root,casher &cash);
     };
 }
 

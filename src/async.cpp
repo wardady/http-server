@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "http.h"
+#include "casher.h"
 
 namespace asio = boost::asio;
 namespace po = boost::program_options;
@@ -24,24 +25,25 @@ class session : public std::enable_shared_from_this<session> {
     asio::streambuf read_buff;
     asio::streambuf write_buff;
     const std::string &doc_root;
+    casher& cash;
 public:
-    explicit session(asio::ip::tcp::socket socket, const std::string &doc_root)
-            : socket(std::move(socket)), doc_root(doc_root) {}
+    explicit session(asio::ip::tcp::socket socket, const std::string &doc_root, casher &cash)
+            : socket(std::move(socket)), doc_root(doc_root), cash{cash} {}
 
     void run() { on_connect(); }
 
     // read client's http request
     void on_connect() {
         asio::async_read(socket, read_buff, asio::transfer_at_least(1),
-                                std::bind(&session::on_read, shared_from_this(), std::placeholders::_1,
-                                          std::placeholders::_2));
+                         std::bind(&session::on_read, shared_from_this(), std::placeholders::_1,
+                                   std::placeholders::_2));
     }
 
     // callback for reading client's http request
     void on_read(boost::system::error_code ec, std::size_t s) {
         if (!ec) {
             http::request req(read_buff);
-            req.write_response(write_buff, doc_root);
+            req.write_response(write_buff, doc_root, std::ref(cash));
             asio::async_write(socket, write_buff,
                               std::bind(&session::on_write, shared_from_this(), std::placeholders::_1,
                                         std::placeholders::_2));
@@ -63,9 +65,11 @@ class listener : public std::enable_shared_from_this<listener> {
     asio::ip::tcp::acceptor acceptor_;
     asio::ip::tcp::socket socket_;
     const std::string &doc_root_;
+    casher cash;
+
 public:
     listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root)
-            : acceptor_(ioc), socket_(ioc), doc_root_(doc_root) {
+            : acceptor_(ioc), socket_(ioc), doc_root_(doc_root), cash(true) {
         boost::system::error_code ec;
 
         // initialize acceptor by endpoint
@@ -97,7 +101,7 @@ public:
     void on_accept(boost::system::error_code ec) {
         if (!ec)
             // initialize session
-            std::make_shared<session>(std::move(socket_), doc_root_)->run();
+            std::make_shared<session>(std::move(socket_), doc_root_,std::ref(cash))->run();
         else
             std::cerr << "Accepting connection error: " << ec.message() << std::endl;
         // accept next connection
@@ -109,9 +113,9 @@ int main(int argc, char *argv[]) {
     // define options to be shown on --help
     po::options_description basic_options("Options");
     basic_options.add_options()
-        ("help", "print help message")
-        ("port,p", po::value<uint16_t>(), "specify port number")
-        ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use");
+            ("help", "print help message")
+            ("port,p", po::value<uint16_t>(), "specify port number")
+            ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use");
 
     // define hidden options
     po::options_description hidden_options("Hidden options");
@@ -152,7 +156,9 @@ int main(int argc, char *argv[]) {
     // create ioservice shared between all threads
     asio::io_service ioc{threads};
     // initialize and run listener
-    std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(), vm["port"].as<uint16_t >()}, vm["directory"].as<std::string>())->run();
+    std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(),
+                                                            vm["port"].as<uint16_t>()},
+                               vm["directory"].as<std::string>())->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;

@@ -2,6 +2,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/filesystem.hpp>
 #include "http.h"
+#include "casher.h"
 
 namespace http {
     request::request(asio::streambuf &buff) {
@@ -13,15 +14,14 @@ namespace http {
         version = list[2];
     }
 
-    void request::write_response(asio::streambuf &buff, const std::string &doc_root) {
+    void request::write_response(asio::streambuf &buff, const std::string &doc_root, casher &cash) {
         std::ostream out(&buff);
         if (method == "GET") {
             // currently supports only GET methods
-            std::string doc = doc_root + (URI == "/" ? "/index.html" : "/");
+            std::string doc = doc_root + (URI == "/" ? "/index.html" : URI);
             // look for index.html if no file specified
             if (boost::filesystem::exists(doc)) {
-                std::ifstream file(doc);
-                out << version << " " << ok << "\n" << file.rdbuf() << std::endl;
+                out << version << " " << ok << "\n" << cash.get_response_file(doc) << std::endl;
             } else
                 out << version << " " << not_found << "\n" << not_found_body << std::endl;
         } else

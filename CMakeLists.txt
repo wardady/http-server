@@ -2,13 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 project(server)
 
 set(CMAKE_CXX_STANDARD 17)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
 find_package(Threads REQUIRED)
-find_package(Boost 1.69 REQUIRED COMPONENTS system filesystem program_options)
+find_package(Boost 1.70 REQUIRED COMPONENTS system filesystem program_options)
+find_package(TBB REQUIRED)
 set(Boost_USE_MULTITHREADED ON)
 include_directories(${Boost_INCLUDE_DIRS})
 
@@ -21,7 +23,7 @@ elseif(MSVC)
 endif()
 
 include_directories(./inc)
-add_library(http SHARED inc/http.h src/http.cpp ${Boost_LIBRARIES})
+add_library(http SHARED inc/http.h src/http.cpp src/casher.cpp ${Boost_LIBRARIES})
 
 add_executable(async src/async.cpp)
-target_link_libraries(async Threads::Threads ${Boost_LIBRARIES} ${ADDITIONAL_LIBRARIES} http)
+target_link_libraries(async Threads::Threads  ${ADDITIONAL_LIBRARIES} http ${Boost_LIBRARIES} TBB::tbb TBB::malloc TBB::malloc_proxy)
