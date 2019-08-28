@@ -68,8 +68,8 @@ class listener : public std::enable_shared_from_this<listener> {
     casher cash;
 
 public:
-    listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root)
-            : acceptor_(ioc), socket_(ioc), doc_root_(doc_root), cash(true) {
+    listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root, const bool no_cache)
+            : acceptor_(ioc), socket_(ioc), doc_root_(doc_root), cash(!no_cache) {
         boost::system::error_code ec;
 
         // initialize acceptor by endpoint
@@ -115,7 +115,8 @@ int main(int argc, char *argv[]) {
     basic_options.add_options()
             ("help", "print help message")
             ("port,p", po::value<uint16_t>(), "specify port number")
-            ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use");
+            ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use")
+            ("no-cache", "do not cache web-pages");
 
     // define hidden options
     po::options_description hidden_options("Hidden options");
@@ -158,7 +159,7 @@ int main(int argc, char *argv[]) {
     // initialize and run listener
     std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(),
                                                             vm["port"].as<uint16_t>()},
-                               vm["directory"].as<std::string>())->run();
+                               vm["directory"].as<std::string>(), vm.count("no-cache"))->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;
