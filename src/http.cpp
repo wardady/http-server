@@ -9,11 +9,10 @@ namespace http {
     request::request(asio::streambuf &buff) {
         std::vector<std::string> list;
         auto input_string = std::string(std::istreambuf_iterator<char>(&buff), std::istreambuf_iterator<char>());
-        boost::split(list, input_string, boost::is_any_of(" "));
+        boost::split(list, input_string, boost::is_space());
         method = list[0];
         URI = list[1];
         version = list[2];
-        boost::algorithm::trim(version);
     }
 
     void request::write_response(asio::streambuf &buff, const std::string &doc_root, casher &cash) {
