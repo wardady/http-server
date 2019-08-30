@@ -109,20 +109,26 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    cli cli_ob{argc, argv};
-    // create ioservice shared between all threads
-    asio::io_service ioc{cli_ob.get_threads()};
-    // initialize and run listener
-    std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(),
-                                                            cli_ob.get_port()},
-                               cli_ob.get_directory(), cli_ob.get_no_cache())->run();
+    try {
+        cli cli_ob{argc, argv};
+        // create ioservice shared between all threads
+        asio::io_service ioc{cli_ob.get_threads()};
+        // initialize and run listener
+        std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(),
+                                                                cli_ob.get_port()},
+                                   cli_ob.get_directory(), cli_ob.get_no_cache())->run();
 
-    // run ioservice in every thread
-    std::vector<std::thread> thread_vector;
-    thread_vector.reserve(cli_ob.get_threads() - 1);
-    for (auto i = cli_ob.get_threads() - 1; i > 0; --i)
-        thread_vector.emplace_back([&ioc] { ioc.run(); });
-    ioc.run();
+        // run ioservice in every thread
+        std::vector<std::thread> thread_vector;
+        thread_vector.reserve(cli_ob.get_threads() - 1);
+        for (auto i = cli_ob.get_threads() - 1; i > 0; --i)
+            thread_vector.emplace_back([&ioc] { ioc.run(); });
+        ioc.run();
 
-    return 0;
+        return 0;
+    }
+    catch (std::exception &err) {
+        err.what();
+        return 1;
+    }
 }
