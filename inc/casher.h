@@ -11,7 +11,7 @@ public:
     std::string get_response_file(const std::string& filename);
 private:
     tbb::concurrent_hash_map<std::string, std::string> buffered_files;
-    bool hashing;
+    const bool hashing;
 };
 
 #endif //SERVER_CASHER_H

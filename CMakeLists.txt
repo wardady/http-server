@@ -23,7 +23,7 @@ elseif(MSVC)
 endif()
 
 include_directories(./inc)
-add_library(http SHARED inc/http.h src/http.cpp src/casher.cpp ${Boost_LIBRARIES})
+add_library(http SHARED inc/http.h src/http.cpp src/casher.cpp inc/cli.h src/cli.cpp ${Boost_LIBRARIES})
 
 add_executable(async src/async.cpp)
 target_link_libraries(async Threads::Threads  ${ADDITIONAL_LIBRARIES} http ${Boost_LIBRARIES} TBB::tbb TBB::malloc TBB::malloc_proxy)
