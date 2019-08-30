@@ -6,8 +6,7 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/io_service.hpp>
-
-#include <boost/program_options.hpp>
+#include "cli.h"
 
 #include <iostream>
 #include <string>
@@ -18,14 +17,13 @@
 #include "casher.h"
 
 namespace asio = boost::asio;
-namespace po = boost::program_options;
 
 class session : public std::enable_shared_from_this<session> {
     asio::ip::tcp::socket socket;
     asio::streambuf read_buff;
     asio::streambuf write_buff;
     const std::string &doc_root;
-    casher& cash;
+    casher &cash;
 public:
     explicit session(asio::ip::tcp::socket socket, const std::string &doc_root, casher &cash)
             : socket(std::move(socket)), doc_root(doc_root), cash{cash} {}
@@ -68,7 +66,8 @@ class listener : public std::enable_shared_from_this<listener> {
     casher cash;
 
 public:
-    listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root, const bool no_cache)
+    listener(asio::io_context &ioc, const asio::ip::tcp::endpoint &endpoint, const std::string &doc_root,
+             const bool no_cache)
             : acceptor_(ioc), socket_(ioc), doc_root_(doc_root), cash(!no_cache) {
         boost::system::error_code ec;
 
@@ -101,7 +100,7 @@ public:
     void on_accept(boost::system::error_code ec) {
         if (!ec)
             // initialize session
-            std::make_shared<session>(std::move(socket_), doc_root_,std::ref(cash))->run();
+            std::make_shared<session>(std::move(socket_), doc_root_, std::ref(cash))->run();
         else
             std::cerr << "Accepting connection error: " << ec.message() << std::endl;
         // accept next connection
@@ -110,61 +109,18 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    // define options to be shown on --help
-    po::options_description basic_options("Options");
-    basic_options.add_options()
-            ("help", "print help message")
-            ("port,p", po::value<uint16_t>(), "specify port number")
-            ("threads,t", po::value<int>()->default_value(2), "specify number of threads to use")
-            ("no-cache", "do not cache web-pages");
-
-    // define hidden options
-    po::options_description hidden_options("Hidden options");
-    hidden_options.add_options()
-            ("directory,d", po::value<std::string>(), "directory to serve from");
-
-    po::options_description options;
-    options.add(basic_options).add(hidden_options);
-
-    // define positional options
-    po::positional_options_description positional;
-    positional.add("directory", 1);
-
-    po::variables_map vm;
-    auto parsed = po::command_line_parser(argc, argv).options(options).positional(positional).run();
-    po::store(parsed, vm);
-
-    // show help message
-    if (vm.count("help")) {
-        std::cout << basic_options << std::endl;
-        return 0;
-    }
-
-    // port is not specified
-    if (!vm.count("port")) {
-        std::cout << "Port to use is not specified" << std::endl;
-        return 1;
-    }
-
-    // directory is not specified
-    if (!vm.count("directory")) {
-        std::cout << "Directory to serve from is not specified" << std::endl;
-        return 1;
-    }
-
-    auto threads = std::max(1, vm["threads"].as<int>());
-
+    cli cli_ob{argc, argv};
     // create ioservice shared between all threads
-    asio::io_service ioc{threads};
+    asio::io_service ioc{cli_ob.get_threads()};
     // initialize and run listener
     std::make_shared<listener>(ioc, asio::ip::tcp::endpoint{asio::ip::tcp::v4(),
-                                                            vm["port"].as<uint16_t>()},
-                               vm["directory"].as<std::string>(), vm.count("no-cache"))->run();
+                                                            cli_ob.get_port()},
+                               cli_ob.get_directory(), cli_ob.get_no_cache())->run();
 
     // run ioservice in every thread
     std::vector<std::thread> thread_vector;
-    thread_vector.reserve(threads - 1);
-    for (auto i = threads - 1; i > 0; --i)
+    thread_vector.reserve(cli_ob.get_threads() - 1);
+    for (auto i = cli_ob.get_threads() - 1; i > 0; --i)
         thread_vector.emplace_back([&ioc] { ioc.run(); });
     ioc.run();
 
