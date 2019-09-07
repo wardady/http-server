@@ -47,6 +47,7 @@ cli::cli(int argc, char **argv) {
     threads = std::max(1, vm["threads"].as<int>());
     port = vm["port"].as<unsigned short>();
     no_cache = vm.count("no-cache");
+    directory = vm["directory"].as<std::string>();
 }
 
 int cli::get_threads() {
